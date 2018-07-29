@@ -1,10 +1,10 @@
 /**
  * ThrowableWeapon.js
- * This is a base type of weapon which is thrown like a generade 
- * it lands and generally explodes after a set time. 
+ * This is a base type of weapon which is thrown like a generade
+ * it lands and generally explodes after a set time.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../system/Graphics.ts"/>
@@ -38,7 +38,7 @@ class ThrowableWeapon extends BaseWeapon
     {
         var timerBoxWidth = 20;
         var timerBoxHeight = 22
-        return Graphics.preRenderer.render(function (ctx) =>
+        return Graphics.preRenderer.render((ctx) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -138,7 +138,7 @@ class ThrowableWeapon extends BaseWeapon
         this.fixture = Physics.world.CreateBody(bodyDef).CreateFixture(fixDef);
         this.body = this.fixture.GetBody();
         this.body.SetLinearVelocity(initalVelocity);
-        
+
         if ((this instanceof Dynamite) == false)
         {
             //Visual hack, as box2d doesn't have air resistence
@@ -151,7 +151,7 @@ class ThrowableWeapon extends BaseWeapon
                 this.body.SetAngularVelocity(-0.7);
             }
         }
-        
+
 
         this.body.SetUserData(this);
 
@@ -164,7 +164,7 @@ class ThrowableWeapon extends BaseWeapon
     {
         var initalVelocity = worm.target.getTargetDirection().Copy();
 
-        //if(this.worm.direction 
+        //if(this.worm.direction
         initalVelocity.Multiply(1.5);
 
         var initalPosition = worm.body.GetPosition();
@@ -177,7 +177,7 @@ class ThrowableWeapon extends BaseWeapon
 
     }
 
-    //This method is overloaded in sub-classes 
+    //This method is overloaded in sub-classes
     playWormVoice()
     {
         Utilies.pickRandomSound(["watchthis", "fire", "grenade", "incoming", "laugh"]).play();
@@ -224,10 +224,10 @@ class ThrowableWeapon extends BaseWeapon
             if (this.detonationTimer.hasTimePeriodPassed())
             {
                 this.detonate();
-            }  
+            }
 
              this.detonationTimer.update();
-        }     
+        }
     }
 
 

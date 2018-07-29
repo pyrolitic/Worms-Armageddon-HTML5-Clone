@@ -2,7 +2,7 @@
  *  Effects.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../system/Utilies.ts"/>
@@ -19,8 +19,8 @@ module Effects
     export function explosion(epicenter,
         explosionRadius,
         effectedRadius,
-        explosiveForce, 
-        maxDamage, 
+        explosiveForce,
+        maxDamage,
         entityThatCausedExplosion = null,
         soundEffectToPlay = AssetManager.getSound("explosion" + Utilies.random(1, 3)),
         particleEffectType = ParticleEffect,
@@ -34,7 +34,7 @@ module Effects
         Physics.applyToNearByObjects(
             epicenter,
             effectedRadius,
-            function (fixture, epicenter) =>
+            (fixture, epicenter) =>
             {
                 // Applys force to all the bodies in the radius
                 if (fixture.GetBody().GetType() != b2Body.b2_staticBody && fixture.GetBody().GetUserData() instanceof Worm)
@@ -46,7 +46,7 @@ module Effects
                     var forceVec = direction.Copy();
 
                     var diff = effectedRadius - direction.Length();
-                    
+
                     if (diff < 0)
                     {
                         diff = 0;
@@ -64,7 +64,7 @@ module Effects
                         forceVec.x = 0;
                         forceVec.y /= 10;
                     }
-                       
+
                     fixture.GetBody().ApplyImpulse(forceVec, fixture.GetBody().GetPosition());
 
                 }
@@ -75,8 +75,8 @@ module Effects
 
         if(soundEffectToPlay != null)
         soundEffectToPlay.play();
-        
-        return particleAnimation; 
+
+        return particleAnimation;
     }
 
 

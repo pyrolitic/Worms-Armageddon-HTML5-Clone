@@ -5,7 +5,7 @@
  * It displays all the weapons + ammo and allows the user to select a weapon.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Main.ts"/>
@@ -30,24 +30,15 @@ class WeaponsMenu
         this.htmlElement = $("#" + this.cssId);
 
 
-         $('#'+this.toggleButtonCssId).click(function =>
+         $('#'+this.toggleButtonCssId).click(() =>
          {
              if (Client.isClientsTurn())
             {
-                _this.toggle();
+                this.toggle();
             }
          });
 
-        var _this = this;
-        $(window).keypress(function (event)
-        {
-            if (Client.isClientsTurn() && Controls.checkControls(Controls.toggleWeaponMenu, event.which))
-            {
-                _this.toggle();
-            }
-        });
-
-        $('body').mousedown(function (event) =>
+        $(window).keypress((event) =>
         {
             if (Client.isClientsTurn() && Controls.checkControls(Controls.toggleWeaponMenu, event.which))
             {
@@ -55,7 +46,15 @@ class WeaponsMenu
             }
         });
 
-        $('body').on('contextmenu', "#" + this.cssId, function (e)
+        $('body').mousedown((event) =>
+        {
+            if (Client.isClientsTurn() && Controls.checkControls(Controls.toggleWeaponMenu, event.which))
+            {
+                this.toggle();
+            }
+        });
+
+        $('body').on('contextmenu', "#" + this.cssId, (e) =>
         {
             return false;
         });
@@ -139,8 +138,7 @@ class WeaponsMenu
         $($(this.htmlElement).children().get(1)).append(html);
 
 
-        var _this = this;
-        $("#" + this.cssId + " li").click(function ()
+        $("#" + this.cssId + " li").click(() =>
         {
             var weaponId = parseInt($(this).attr('id'));
 
@@ -151,8 +149,8 @@ class WeaponsMenu
             }
 
             AssetManager.getSound("CursorSelect").play();
-            _this.selectWeapon(weaponId);
-            _this.toggle();
+            this.selectWeapon(weaponId);
+            this.toggle();
         });
 
     }

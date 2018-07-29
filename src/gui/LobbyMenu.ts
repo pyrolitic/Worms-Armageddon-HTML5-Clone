@@ -1,9 +1,9 @@
 /**
- *  
+ *
  * LobbyMenu.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Game.ts"/>
@@ -77,18 +77,17 @@ class LobbyMenu
 
     bind()
     {
-        
+
         $('#googlePlusdisconnectUser').click(function ()
         {
             googlePlusdisconnectUser(access_token);
         });
 
-        var _this = this;
-        $('#onlineMenu a').click(function (e)
+        $('#onlineMenu a').click((e) =>
         {
             e.preventDefault();
 
-            _this.leaderBoardView.update();
+            this.leaderBoardView.update();
             //this.leaderBoardView.update();
             //Changes the menu css to give user feedback
             $('.nav').children().removeClass('active');
@@ -99,14 +98,14 @@ class LobbyMenu
             $($(this).attr('value')).siblings().hide();
         })
 
-        $(LobbyMenu.CSS_ID.QUICK_PLAY_BTN).click(function =>
+        $(LobbyMenu.CSS_ID.QUICK_PLAY_BTN).click(() =>
         {
             $(LobbyMenu.CSS_ID.QUICK_PLAY_BTN).unbind();
             AssetManager.getSound("CursorSelect").play();
             this.lobbyRef.client_joinQuickGame();
         })
 
-        $(LobbyMenu.CSS_ID.CREATE_BTN).click(function =>
+        $(LobbyMenu.CSS_ID.CREATE_BTN).click(() =>
         {
             $(LobbyMenu.CSS_ID.CREATE_LOBBY_POP_UP).modal('show');
 
@@ -115,13 +114,13 @@ class LobbyMenu
             if ($('#mapSelector').length == 0)
             {
                 $('.modal-body').prepend(levelSelector.getView());
-                levelSelector.bind(function () => {
+                levelSelector.bind(() => {
                     AssetManager.getSound("CursorSelect").play();
 
                 });
             }
 
-            $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM_SUBMIT).click(function (e) =>
+            $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM_SUBMIT).click((e) =>
             {
                 $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM_SUBMIT).unbind();
                 var name = $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM + " #inputName").val();
@@ -142,7 +141,7 @@ class LobbyMenu
 
     show(callback)
     {
-        $('.slide').fadeOut('normal', function =>
+        $('.slide').fadeOut('normal', () =>
         {
             $('.slide').empty();
             $('.slide').append(this.view);
@@ -189,12 +188,11 @@ class LobbyMenu
         }
         $(LobbyMenu.CSS_ID.LOBBY_TABLE).append('</tbody></table>');
 
-        var _this = this;
-        $(LobbyMenu.CSS_ID.JOIN_BTN).click(function ()
+        $(LobbyMenu.CSS_ID.JOIN_BTN).click(() =>
         {
 
             AssetManager.getSound("CursorSelect").play();
-            _this.lobbyRef.client_joinGameLobby($(this).attr('value'));
+            this.lobbyRef.client_joinGameLobby($(this).attr('value'));
         })
     }
 

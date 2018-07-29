@@ -17,7 +17,7 @@ module Client
             Logger.debug(" Client connecting to " + dest);
             socket = io.connect(dest);
 
-            socket.on(Events.client.ASSIGN_USER_ID, function (id) =>
+            socket.on(Events.client.ASSIGN_USER_ID, (id) =>
             {
                 Logger.debug(" Your have been assigned an id " + id);
                 Client.id = id;
@@ -25,7 +25,7 @@ module Client
 
             socket.on('disconnect', function(){
 
-                Notify.display("Bad News :(", 
+                Notify.display("Bad News :(",
                     "So it looks like the game server has crashed or maybe your internet connection has been cut? "+
                     "Either way this game is over, so refresh this page now. The server will have rebooted by the time you read this hopefully.",
                  -1, Notify.levels.error,true);
@@ -34,22 +34,22 @@ module Client
 
             });
 
-            socket.on(Events.client.ACTION, function (packet) =>
+            socket.on(Events.client.ACTION, (packet) =>
             {
                var instructionSet : InstructionChain = Utilies.copy(new InstructionChain(), packet);
                instructionSet.callFunc(GameInstance);
-                
+
             });
 
             // This allows for smaller action packets
-            socket.on(Events.client.CURRENT_WORM_ACTION, function (packet) =>
+            socket.on(Events.client.CURRENT_WORM_ACTION, (packet) =>
             {
                var instructionSet : InstructionChain = Utilies.copy(new InstructionChain(), packet);
                instructionSet.callFunc(GameInstance.state.getCurrentPlayer().getTeam().getCurrentWorm());
-                
+
             });
 
-            socket.on(Events.client.UPDATE, function (packet) =>
+            socket.on(Events.client.UPDATE, (packet) =>
             {
                     var physicsDataPacket = new PhysiscsDataPacket(packet);
                     physicsDataPacket.override(Physics.fastAcessList);

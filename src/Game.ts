@@ -3,7 +3,7 @@
  * This is the main game object which controls gameloop and basically everything in the game
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Camera.ts"/>
@@ -89,20 +89,20 @@ class Game
         this.setupCanvas();
 
         //If the window gets resize, resize the canvas
-        $(window).resize(function () => {
+        $(window).resize(() => {
             this.setupCanvas();
         });
 
         //If we go full screen also resize
-        document.addEventListener("fullscreenchange", function () => {
+        document.addEventListener("fullscreenchange", () => {
             this.setupCanvas();
         }, false);
 
-        document.addEventListener("mozfullscreenchange", function () => {
+        document.addEventListener("mozfullscreenchange", () => {
             this.setupCanvas();
         }, false);
 
-        document.addEventListener("webkitfullscreenchange", function () => {
+        document.addEventListener("webkitfullscreenchange", () => {
             this.setupCanvas();
         }, false);
 
@@ -117,7 +117,7 @@ class Game
         this.spawns = [];
         if (Settings.DEVELOPMENT_MODE && this.particleEffectMgmt != null)
         {
-            window.addEventListener("click", function (evt: any) =>
+            window.addEventListener("click", (evt: any) =>
             {
                 this.particleEffectMgmt.add(new ParticleEffect(this.camera.getX() + evt.pageX, this.camera.getY() + evt.pageY));
                 this.spawns.push(new b2Vec2(this.camera.getX() + evt.pageX, this.camera.getY() + evt.pageY));
@@ -153,7 +153,7 @@ class Game
     goFullScreen()
     {
 
-        //var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) ||    // alternative standard method  
+        //var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) ||    // alternative standard method
         //        (document.mozFullScreen || document.webkitIsFullScreen);
 
         //var docElm = document.documentElement;
@@ -226,7 +226,7 @@ class Game
         this.gameTimer.show();
         this.weaponMenu.show();
 
-        
+
 
         // Need to fire the menu call back to remove it and start the game
 
@@ -247,7 +247,7 @@ class Game
         //Only inited if its a touch device
         TouchUI.init();
 
-        setTimeout(function () =>
+        setTimeout(() =>
         {
             this.state.physicsWorldSettled = true;
 

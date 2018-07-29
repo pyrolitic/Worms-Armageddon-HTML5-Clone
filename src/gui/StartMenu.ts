@@ -4,7 +4,7 @@
  * allows them to start the game and shows them the controls.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Settings.ts" />
@@ -46,11 +46,10 @@ class StartMenu
     onGameReady(callback)
     {
 
-        var _this = this;
         StartMenu.callback = callback;
         if (!Settings.DEVELOPMENT_MODE)
         {
-            var loading = setInterval(function () =>
+            var loading = setInterval(() =>
             {
 
                 $('#notice').empty();
@@ -60,7 +59,7 @@ class StartMenu
                     this.settingsMenu = new SettingsMenu();
                     $('#startLocal').removeAttr("disabled");
                     $('#startOnline').removeAttr("disabled");
-                  
+
 
                     // IE tell the user to get a better browser, but still allow them to play
                     if ($.browser.msie)
@@ -78,7 +77,7 @@ class StartMenu
                     {
                         $('#startTutorial').removeAttr("disabled");
                         $('#notice').append('<div class="alert alert-success" style="text-align:center"> <strong> Games loaded and your ready to play!! </strong><br> Also thanks for using a modern browser. <a href="#" id="awesome">Your awesome!</a></div> ');
-                        $('#awesome').click(function => {
+                        $('#awesome').click(() => {
                             Notify.display("Awesome!", "<img src='../data/images/awesome.jpg'/>", 5000);
                         });
                     }
@@ -92,7 +91,7 @@ class StartMenu
             }, 500);
 
 
-            $('#startLocal').click(function =>
+            $('#startLocal').click(() =>
             {
                 if (AssetManager.isReady())
                 {
@@ -100,7 +99,7 @@ class StartMenu
                     AssetManager.getSound("CursorSelect").play();
                     $('.slide').empty();
                     $('.slide').append(this.settingsMenu.getView());
-                    this.settingsMenu.bind(function () => {
+                    this.settingsMenu.bind(() => {
                         AssetManager.getSound("CursorSelect").play();
                         this.controlsMenu(callback);
                     });
@@ -110,7 +109,7 @@ class StartMenu
 
             });
 
-            $('#startOnline').click(function =>
+            $('#startOnline').click(() =>
             {
                   $('#startOnline').off('click');
                 if (AssetManager.isReady())
@@ -130,7 +129,7 @@ class StartMenu
 
             });
 
-            $('#startTutorial').click(function =>
+            $('#startTutorial').click(() =>
             {
                 $('#startTutorial').off('click');
                 if (AssetManager.isReady())
@@ -140,7 +139,7 @@ class StartMenu
                     //Initalizse the tutorial object so its used in the game
                     GameInstance.tutorial = new Tutorial();
 
-                    _this.controlsMenu(callback);
+                    this.controlsMenu(callback);
                 }
             });
 
@@ -148,12 +147,12 @@ class StartMenu
         } else
         {
             //Development Mode - Just make sure all assets are loaded first
-            var loading = setInterval(function () =>
-            {   
+            var loading = setInterval(() =>
+            {
                 if (AssetManager.getPerAssetsLoaded() == 100)
                 {
                     clearInterval(loading);
-                    callback();               
+                    callback();
                 }
             },2)
         }
@@ -162,13 +161,13 @@ class StartMenu
     controlsMenu(callback)
     {
 
-        $('.slide').fadeOut('normal', function =>
+        $('.slide').fadeOut('normal', () =>
         {
             $('.slide').empty();
             $('.slide').append(this.controlsView);
             $('.slide').fadeIn('slow');
 
-            $('#startLocal').click(function =>
+            $('#startLocal').click(() =>
             {
                 $('#startLocal').unbind();
                 $('#splashScreen').remove();

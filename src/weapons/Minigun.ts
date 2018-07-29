@@ -48,7 +48,7 @@ class Minigun extends RayWeapon
         this.worm.swapSpriteSheet(Sprites.worms.minigunFire);
 
         //Setup a timer, to stop the weapon firing after so many secounds
-        setTimeout(function () => {
+        setTimeout(() => {
 
                 //Once finished firing, deactive weapon and singal next turn
                 this.setIsActive(false);
@@ -64,11 +64,11 @@ class Minigun extends RayWeapon
 
         if (super.update())
         {
-            this.fireRate.update();       
+            this.fireRate.update();
 
             if (this.fireRate.hasTimePeriodPassed())
             {
-                
+
                 var hitPiont = Physics.shotRay(this.worm.body.GetPosition(), this.worm.target.getTargetDirection().Copy());
                 if (hitPiont)
                 {
@@ -81,7 +81,7 @@ class Minigun extends RayWeapon
                        null);
                 }
             }
-          
+
 
         }
 

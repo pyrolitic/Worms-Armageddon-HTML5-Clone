@@ -1,9 +1,9 @@
 /**
- *  
+ *
  * LeaderboardsView.js manages updating the leaderboards view and all that shit
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Game.ts"/>
@@ -56,9 +56,9 @@ class LeaderBoardView
     }
 
     update()
-    { 
+    {
 
-        var callback = function (leaderBoardData) => {
+        var callback = (leaderBoardData) => {
 
             var leaderBoardData = JSON.parse(leaderBoardData);
             var combinedUserData = [];
@@ -73,17 +73,17 @@ class LeaderBoardView
                 $.ajax({
                     url: url,
                     dataType: 'jsonp',
-                    success: function (userDataFromGoogle) =>
+                    success: (userDataFromGoogle) =>
                     {
                         //If a users account has been disabled this will be null
                         if (userDataFromGoogle.id)
                         {
                             combinedUserData[userDataFromGoogle.id].image = userDataFromGoogle.image.url;
-                            combinedUserData[userDataFromGoogle.id].name = userDataFromGoogle.displayName;                           
+                            combinedUserData[userDataFromGoogle.id].name = userDataFromGoogle.displayName;
 
                         }
                         dataLoadCount++;
-                       
+
 
                         if (dataLoadCount == leaderBoardData.length)
                         {
@@ -104,4 +104,4 @@ class LeaderBoardView
         });
 
     }
-
+}

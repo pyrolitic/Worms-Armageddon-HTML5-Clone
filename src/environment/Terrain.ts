@@ -5,7 +5,7 @@
  * constructs box2d objects which make up the terrain. It also handles deformations
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../system/Physics.ts"/>
@@ -30,7 +30,7 @@ class Terrain
     boundary: TerrainBoundary;
 
     //Used to batch the deforms to one draw and one box2d regen
-    deformTerrainBatchList = []; 
+    deformTerrainBatchList = [];
 
     TERRAIN_RECT_HEIGHT: number;
 
@@ -49,7 +49,7 @@ class Terrain
         this.TERRAIN_RECT_HEIGHT = 5;
 
         //Used for increased preformance. Its more effectent to draw one canvas onto another
-        //instead of a large pixel buffer array 
+        //instead of a large pixel buffer array
         this.bufferCanvas = <HTMLCanvasElement>document.createElement('canvas');
         this.bufferCanvas.width = this.Offset.x+(terrainImage.width*1.5);
         this.bufferCanvas.height =  this.Offset.y+(terrainImage.height*1.5);
@@ -70,7 +70,7 @@ class Terrain
 
     getWidth()
     {
-       return this.boundary.worldWidth;    
+       return this.boundary.worldWidth;
     }
 
      getHeight()
@@ -78,7 +78,7 @@ class Terrain
          return this.boundary.worldHeight;
     }
 
-    // This setup physical bodies from image data 
+    // This setup physical bodies from image data
     createTerrainPhysics(x, y, width, height, data, world, worldScale)
     {
         x = Math.floor(x);
@@ -102,8 +102,8 @@ class Terrain
 
         var bodiesCreated = 0;
 
-        // Used to create a single rect out of a series of consecnative solid 
-        var makeBlock = function () => {
+        // Used to create a single rect out of a series of consecnative solid
+        var makeBlock = () => {
 
             fixDef.shape.SetAsBox((rectWidth / worldScale) / 2, (rectheight / worldScale) / 2);
             bodyDef.position.x = ((xPos / 4) - (rectWidth / 2)) / worldScale;
@@ -153,7 +153,7 @@ class Terrain
         Logger.log("Current body count " + bodiesCreated);
     }
 
-    //Adds this deform position to the list so that the deforms 
+    //Adds this deform position to the list so that the deforms
     //can be batched at the end of the update loop
     addToDeformBatch(x, y, r)
     {
@@ -216,7 +216,7 @@ class Terrain
                 Physics.pixelToMeters( y + normalizedRadis)
             );
 
-            Physics.world.QueryAABB(function (fixture) =>
+            Physics.world.QueryAABB((fixture) =>
             {
                 if (fixture.GetBody().GetType() == b2Body.b2_staticBody && fixture.GetBody().GetUserData() instanceof Terrain)
                 {
@@ -273,19 +273,19 @@ class Terrain
 
         //ctx.drawImage(this.bufferCanvas, -300, -300, this.drawingCanvas.width, this.drawingCanvas.height);
 
-        ctx.drawImage(this.bufferCanvas, 
+        ctx.drawImage(this.bufferCanvas,
             x,
             y,
             w,
             h,
-             0, 
+             0,
             -5,
             w,
             h
-            
+
             );
 
-        
+
         // this.drawingCanvasContext.drawImage(this.bufferCanvas, 2, -6)
     };
 

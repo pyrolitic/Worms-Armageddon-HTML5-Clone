@@ -1,7 +1,7 @@
 /**
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Graphics.ts"/>
@@ -64,12 +64,12 @@ class WormAnimationManger
 
             this.worm.setSpriteDef(this.worm.team.getWeaponManager().getCurrentWeapon().takeOutAnimations, false, true);
 
-            // Once the animation to take out the weapon is finished then display this still image, which is the aiming image 
+            // Once the animation to take out the weapon is finished then display this still image, which is the aiming image
             // most of the time, depending on the type or weapon or tool.
-            this.worm.onAnimationFinish(function () =>
+            this.worm.onAnimationFinish(() =>
             {
-                this.worm.setSpriteDef(this.worm.team.getWeaponManager().getCurrentWeapon().takeAimAnimations);            
-                this.worm.setCurrentFrame(this.worm.target.previousSpriteFrame);   
+                this.worm.setSpriteDef(this.worm.team.getWeaponManager().getCurrentWeapon().takeAimAnimations);
+                this.worm.setCurrentFrame(this.worm.target.previousSpriteFrame);
                 this.worm.finished = true;
                 this.currentState = WormAnimationManger.WORM_STATE.aiming;
             });
@@ -90,9 +90,9 @@ class WormAnimationManger
 
     update()
     {
-   
+
         //Only play the death animation if the player is die first
-        // Also they have come to a stop 
+        // Also they have come to a stop
         if (GameInstance.wormManager.areAllWormsStationary() &&
             this.worm.health == 0 &&
             WormAnimationManger.playerAttentionSemaphore == 0 &&
@@ -101,10 +101,10 @@ class WormAnimationManger
             WormAnimationManger.playerAttentionSemaphore++;
 
             GameInstance.camera.panToPosition(Physics.vectorMetersToPixels(this.worm.body.GetPosition()));
-            
-            //Set the onFinishAnimation now as once the spriteDef is locked 
+
+            //Set the onFinishAnimation now as once the spriteDef is locked
             // can't modify it
-            this.worm.onAnimationFinish(function () =>
+            this.worm.onAnimationFinish(() =>
             {
                 // Once the players death animated is finished then we most create
                 // a particle explision effect and pay an explosion sound.
@@ -125,12 +125,12 @@ class WormAnimationManger
                      maxDamage
                  );
 
-                animation.onAnimationFinish(function () =>
+                animation.onAnimationFinish(() =>
                 {
                     //All animations to do with death are finished so derement semaphore
                     WormAnimationManger.playerAttentionSemaphore--;
-                });           
-            });          
+                });
+            });
             this.worm.setSpriteDef(Sprites.worms.die, true, true);
             this.worm.setNoLoop(true);
 
@@ -138,13 +138,13 @@ class WormAnimationManger
         }
 
             // Once the player comes to a rest then we trigger the reduce health animation
-         // if they have been hurt 
+         // if they have been hurt
          if (GameInstance.wormManager.areAllWormsStationary() && this.worm.damageTake > 0)
          {
-            
+
             WormAnimationManger.playerAttentionSemaphore++;
             var animation = new ToostMessage(Physics.vectorMetersToPixels(this.worm.body.GetPosition()), this.worm.damageTake, this.worm.team.color);
-            animation.onAnimationFinish(function () =>
+            animation.onAnimationFinish(() =>
             {
                 WormAnimationManger.playerAttentionSemaphore--;
                 GameInstance.healthMenu.update(this.worm.team);
@@ -196,7 +196,7 @@ class WormAnimationManger
 
 
         //Once the idel timer has run out we which to idel animation and pause the timer
-        // as some of the idel animations are animated and some are not. 
+        // as some of the idel animations are animated and some are not.
         if (this.idleTimer.hasTimePeriodPassed())
         {
             this.idleTimer.pause();

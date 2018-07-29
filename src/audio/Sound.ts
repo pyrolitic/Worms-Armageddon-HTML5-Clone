@@ -1,17 +1,17 @@
 /**
  * Sound.js
- * Sound wraps the Web audio api. When a sound file is loaded 
- * one of these is created using the sound buffer. It allows for a 
+ * Sound wraps the Web audio api. When a sound file is loaded
+ * one of these is created using the sound buffer. It allows for a
  * cleaner and simple api for doing basic things like playing sound, controling volume etc
  *
  * SoundFallback use just the simple Audio tag, works ok but not as feature full as web audio api.
- * 
+ *
  *  License: Apache 2.0
  *  author:  Ciarán McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../system/Utilies.ts"/>
-declare var webkitAudioContext; 
+declare var webkitAudioContext;
 
 class Sound
 {
@@ -50,7 +50,7 @@ class Sound
                 this.playing = true;
                 var bufferLenght = this.buffer.duration;
 
-                setTimeout(function () => {
+                setTimeout(() => {
                     this.playing = false;
                 }, bufferLenght * 1000);
             }
@@ -85,7 +85,7 @@ class SoundFallback extends Sound
 
     constructor(soundSrc)
     {
-        super(soundSrc);  
+        super(soundSrc);
         this.load(soundSrc);
     }
 
@@ -94,13 +94,13 @@ class SoundFallback extends Sound
           this.audio = <HTMLAudioElement>document.createElement("Audio");
 
         // When the sound loads sucesfully tell the asset manager
-        $(this.audio).on("loadeddata", function () =>
+        $(this.audio).on("loadeddata", () =>
         {
             AssetManager.numAssetsLoaded++;
             Logger.log(" Sound loaded " + this.audio.src );
         });
 
-        this.audio.onerror = function () => {
+        this.audio.onerror = () => {
             Logger.error( " Sound failed to load " + this.audio.src);
         }
 
@@ -118,7 +118,7 @@ class SoundFallback extends Sound
             //if (this.playing == false || allowSoundOverLay == true)
             {
 
-                this.audio.volume = volume;    
+                this.audio.volume = volume;
                 this.audio.play();
                 this.playing = true;
             }

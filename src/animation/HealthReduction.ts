@@ -2,7 +2,7 @@
  * HealthReduction.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="Sprite.ts"/>
@@ -14,7 +14,7 @@
 ///<reference path="../system/Physics.ts" />
 
 
-//TODO Needs to be clean up, after I hacked it to be more generic 
+//TODO Needs to be clean up, after I hacked it to be more generic
 // for just displaying messages, demo 2moro not enough time to clean it up. More features!!!
 class ToostMessage
 {
@@ -34,7 +34,7 @@ class ToostMessage
     {
         var healthBoxWidth = 39;
         var healthBoxHeight = 18
-        return Graphics.preRenderer.render(function (ctx) =>
+        return Graphics.preRenderer.render((ctx) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -49,7 +49,7 @@ class ToostMessage
     preRenderMessageBox()
     {
         var nameBoxWidth = this.message.length * 10;
-        return Graphics.preRenderer.render(function (ctx) =>
+        return Graphics.preRenderer.render((ctx) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -114,7 +114,7 @@ class ToostMessage
         if (this.timer.hasTimePeriodPassed())
         {
             this.finished = true;
-            
+
             if (this.onFinishFunc)
             {
                 this.onFinishFunc();

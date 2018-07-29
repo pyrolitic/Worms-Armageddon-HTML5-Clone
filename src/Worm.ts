@@ -1,11 +1,11 @@
 /**
  * Worm.js inherts Sprite.js
  *
- * This contains all the logic for each indvdiual worm entity. 
+ * This contains all the logic for each indvdiual worm entity.
  * Its physics objects, sprite drawing, movements etc
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Graphics.ts"/>
@@ -52,7 +52,7 @@ class Worm extends Sprite
     footSensor;
     stateAnimationMgmt: WormAnimationManger;
     target: Target;
-    isDead: bool;
+    isDead: boolean;
 
     soundDelayTimer: Timer;
 
@@ -131,7 +131,7 @@ class Worm extends Sprite
         var nameBoxWidth = this.name.length * 10;
         var healthBoxWidth = 39;
         var healthBoxHeight = 18
-        this.nameBox = Graphics.preRenderer.render(function (ctx) =>
+        this.nameBox = Graphics.preRenderer.render((ctx) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -147,7 +147,7 @@ class Worm extends Sprite
 
         }, nameBoxWidth, 20);
 
-        this.healthBox = Graphics.preRenderer.render(function (ctx) =>
+        this.healthBox = Graphics.preRenderer.render((ctx) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -262,7 +262,7 @@ class Worm extends Sprite
     isStationary()
     {
         var isStationary = this.body.GetLinearVelocity().Length() == 0 // Completely stopped
-        || // OR 
+        || // OR
         Utilies.isBetweenRange(this.body.GetLinearVelocity().y, 0.001, -0.001) && Utilies.isBetweenRange(this.body.GetLinearVelocity().x, 0.001, -0.001); // near enough stopped
 
         return isStationary;
@@ -386,7 +386,7 @@ class Worm extends Sprite
             {
                 // Setup a callback that once the animation finish
                 // unlock it and set it to idel
-                this.onAnimationFinish(function () =>
+                this.onAnimationFinish(() =>
                 {
                     this.setSpriteDef(Sprites.worms.wbackflp, false);
                     this.setSpriteDef(Sprites.worms.idle1, false);
@@ -449,9 +449,9 @@ class Worm extends Sprite
     // over their head and panning the camera toward him.
     activeWorm()
     {
-        
+
         //This makes no sence, but it works.
-        //if (GameInstance.gameType == Game.types.LOCAL_GAME || !Client.isClientsTurn()) 
+        //if (GameInstance.gameType == Game.types.LOCAL_GAME || !Client.isClientsTurn())
         {
             var pos = Physics.vectorMetersToPixels(this.body.GetPosition());
             this.arrow = new BounceArrow(pos);
@@ -539,7 +539,7 @@ class Worm extends Sprite
         ctx.save()
         if (this.direction == Worm.DIRECTION.right)
         {
-            // Used to flip the sprites       
+            // Used to flip the sprites
             ctx.scale(-1, 1);
         }
 

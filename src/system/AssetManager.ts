@@ -1,11 +1,11 @@
 /**
  * AssetManager.js
- * This manages the loading of image and sound assets. 
- * The loaded images and sounds are then acessable from any where by the following. 
+ * This manages the loading of image and sound assets.
+ * The loaded images and sounds are then acessable from any where by the following.
  * AssetManager.images["myImageName"] no need for the full url or the extenision
- * 
+ *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../audio/Sound.ts"/>
@@ -187,8 +187,8 @@ module AssetManager
 
         loadImages(imagesToBeLoaded);
 
-    
-        //Hmm seems like IE9 doesn't like loading anymore then 40 audio files in parallel.  
+
+        //Hmm seems like IE9 doesn't like loading anymore then 40 audio files in parallel.
         //I have 44 audio assets :( #FuckYouInternetExplorer
         //Putting in a delay for IE users
         //if ($.browser.msie)
@@ -196,7 +196,7 @@ module AssetManager
         //    var leftSide = audioToBeLoaded.splice(0, Math.floor(audioToBeLoaded.length / 2));
         //    loadSounds(leftSide);
 
-        //    var timer = setInterval(function () => {
+        //    var timer = setInterval(() => {
 
         //        if (numAssetsLoaded >= imagesToBeLoaded.length + leftSide.length)
         //        {
@@ -245,14 +245,14 @@ module AssetManager
                 {
                     var name = sources[src].match("[a-z,A-Z,0-9]+[.]")[0].replace(".", "")
 
-                    // If IE use mp3 instead 
+                    // If IE use mp3 instead
                     if ($.browser.msie)
                     {
                         sources[src] = sources[src].replace(".wav", ".mp3");
                         sources[src] = sources[src].replace(".WAV", ".mp3");
                     }
 
-                    //Hmm seems like IE9 doesn't like loading anymore then 40 audio files in parallel.  
+                    //Hmm seems like IE9 doesn't like loading anymore then 40 audio files in parallel.
                     //I have 44 audio assets :( #FuckYouInternetExplorer
                     if ($.browser.msie &&  parseInt(src) >=  40)
                     {

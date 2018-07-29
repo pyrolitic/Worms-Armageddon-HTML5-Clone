@@ -1,7 +1,7 @@
 /**
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="LeaderBoardApi.ts"/>
@@ -24,7 +24,7 @@ var api : LeaderBoardApi = new LBApi(settings);
 app.get('/findUserIdByToken/:token', function (req, res)
 {
       var authToken = req.params.token;
-      api.findUsersIdByToken(authToken, function (userId) => {
+      api.findUsersIdByToken(authToken, (userId) => {
               res.send(userId);
       });
 });

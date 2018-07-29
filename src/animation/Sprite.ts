@@ -1,10 +1,10 @@
 /**
- *  
+ *
  * This class manages animation of sprites
- * Its normally a base class for most objects in game like the Worm. 
+ * Its normally a base class for most objects in game like the Worm.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Game.ts"/>
@@ -16,8 +16,8 @@ class Sprite
     spriteDef;
     currentFrameY: number;
 
-    finished: bool;
-    noLoop: bool;
+    finished: boolean;
+    noLoop: boolean;
     lastUpdateTime;
     accumulateDelta;
     isSpriteLocked;
@@ -26,14 +26,14 @@ class Sprite
     image;
 
     frameIncremeter;
-    
+
 
     constructor (spriteDef: SpriteDefinition, noLoop = false)
     {
         //Defualts to moving forward though the sprite
         //though can be used to move back though the sprite
         this.frameIncremeter = 1;
-        
+
         this.lastUpdateTime = 0;
         this.accumulateDelta = 0;
         this.isSpriteLocked = false;
@@ -55,7 +55,7 @@ class Sprite
 
                 if (this.currentFrameY >= this.spriteDef.frameCount)
                 {
-                    // If aniamtion is not meant to loop 
+                    // If aniamtion is not meant to loop
                     if (this.noLoop)
                     {
                         this.finished = true;
@@ -100,7 +100,7 @@ class Sprite
     {
         var tmpCurrentFrameY = Math.floor(this.currentFrameY);
         if(tmpCurrentFrameY >= 0)
-        {       
+        {
             ctx.drawImage(
                    this.image,
                    0, tmpCurrentFrameY * this.frameHeight, this.image.width, this.frameHeight,
@@ -131,18 +131,18 @@ class Sprite
 
     }
 
-    setNoLoop(val: bool)
+    setNoLoop(val: boolean)
     {
         this.noLoop = val;
     }
 
     getFrameHeight()
-    {       
+    {
         return this.frameHeight;
     }
 
     getFrameWidth()
-    {       
+    {
        return this.image.width;
     }
 

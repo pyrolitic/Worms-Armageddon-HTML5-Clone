@@ -2,7 +2,7 @@
  * Tutorial.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Utilies.ts"/>
@@ -14,7 +14,7 @@ class Tutorial
 {
 
     currentCommand;
-    isFinished: bool;
+    isFinished: boolean;
     timeOut;
 
     constructor()
@@ -62,7 +62,7 @@ class Tutorial
             if (this.timeOut == null)
             {
 
-                this.timeOut = setTimeout(function () => {
+                this.timeOut = setTimeout(() => {
 
                     this.nextCommand();
 
@@ -168,7 +168,7 @@ var tutorialCommandBank = [
         message: "You can move the camera around using the arrow keys, give it a shot",
         detection: function ()
         {
-            if (keyboard.isKeyDown(keyboard.keyCodes.Leftarrow) || 
+            if (keyboard.isKeyDown(keyboard.keyCodes.Leftarrow) ||
                 keyboard.isKeyDown(keyboard.keyCodes.Downarrow) ||
                 keyboard.isKeyDown(keyboard.keyCodes.Rightarrow) ||
                 keyboard.isKeyDown(keyboard.keyCodes.Uparrow) )
@@ -195,7 +195,7 @@ var tutorialCommandBank = [
         header: "Awesome!",
         message: "Well Done! Your finished the tutorial, you can just mess around or start a new game",
         detection: function ()
-        {            
+        {
                 return true;
         },
     }

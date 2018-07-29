@@ -2,7 +2,7 @@
  * GameStateManager.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Camera.ts"/>
@@ -16,11 +16,11 @@
 
 class GameStateManager
 {
-    private nextTurnTrigger: bool;
+    private nextTurnTrigger: boolean;
     private currentPlayerIndex: number;
     private players: Player[];
-    isStarted: bool;
-    physicsWorldSettled: bool;
+    isStarted: boolean;
+    physicsWorldSettled: boolean;
 
     constructor()
     {
@@ -64,11 +64,11 @@ class GameStateManager
         // firing of player weapon in some cases
         // Using up the allowed shots/use of a weapon in a turn.
         // player hurting themsleves
-        // turn time up 
+        // turn time up
 
         if (this.nextTurnTrigger)
         {
-            // REQUIRED STATES 
+            // REQUIRED STATES
             // animations finished, which include particle effects.
             // deaths if any
             // players health reduced if any

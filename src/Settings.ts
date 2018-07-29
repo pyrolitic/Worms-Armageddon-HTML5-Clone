@@ -2,7 +2,7 @@
  *  Global settings for the whole game
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="system/Utilies.ts" />
@@ -13,20 +13,20 @@ module Settings
     //Game vars
     export var PLAYER_TURN_TIME = 45 * 1000; // 60 secounds
     export var TURN_TIME_WARING = 5; // after 10 secounds warn player they are running out of time
-   
+
     //General game settings
     export var SOUND = false;
 
     //Server details
-    export var NODE_SERVER_IP = '96.126.111.211'; 
-    export var LEADERBOARD_API_URL = 'http://96.126.111.211'; 
+    export var NODE_SERVER_IP = '96.126.111.211';
+    export var LEADERBOARD_API_URL = 'http://96.126.111.211';
     export var NODE_SERVER_PORT = '8080';
 
     // development vars
-    export var DEVELOPMENT_MODE = false; 
+    export var DEVELOPMENT_MODE = false;
     export var LOG = true;
 
-    //When I want to build the manifest file using 
+    //When I want to build the manifest file using
     // http://westciv.com/tools/manifestR/
     export var BUILD_MANIFEST_FILE = false;
 
@@ -66,7 +66,7 @@ module Settings
         {
            var testWindow = window.open('test.html', '|UnitTests', 'height=1000,width=700,top:100%');
            testWindow.location.reload(); // This is so if the window was left open it refreshs
-            
+
         }
 
         if (argv[commands[3]] == "false")
@@ -79,11 +79,14 @@ module Settings
 
     export function getUrlVars()
     {
+        // This isn't conceptually "replacing" anything, but seems to be an easy way to iterate through the results?
+        // Was originally returning true instead of the original value, but TS complained.
+        // -M
         var vars = {};
-        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) 
+        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) =>
         {
             vars[key] = value;
-            return true;
+            return window.location.href;
         });
         return vars;
     }

@@ -1,9 +1,9 @@
 /**
- *  
+ *
  * Server.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 //<reference path="../../external/socket.io-0.9.d.ts"/>
@@ -40,19 +40,19 @@ class GameServer
     bandwidthMonitor;
 
     constructor (port)
-    {   
+    {
         this.bandwidthMonitor = new BandwidthMonitor(true);
         io = require('socket.io').listen(port);
         this.lobby = new Lobby();
 
-        io.sockets.on('connection', function (socket) =>
+        io.sockets.on('connection', (socket) =>
         {
             this.lobby.onConnection(socket,io);
             this.lobby.server_init(socket,io);
             this.lobby.onDisconnection(socket,io);
 
             //This allows the clients to get the  current time of the server
-            socket.on(Events.client.GET_GAME_TIME, function (msg,func) =>
+            socket.on(Events.client.GET_GAME_TIME, (msg,func) =>
             {
                 func(Date.now());
             });

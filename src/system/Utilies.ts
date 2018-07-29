@@ -1,7 +1,7 @@
 /**
- * Utitles 
+ * Utitles
  * This namespace contains helper functions that I use a lot around the code base
- * or encapluate snippets of code I use a lot in the codebase though by naming it 
+ * or encapluate snippets of code I use a lot in the codebase though by naming it
  * asa function gives the code more readablity.
  *
  * Logger
@@ -12,7 +12,7 @@
  * which is faster then event based input.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../Settings.ts" />
@@ -82,7 +82,7 @@ module Notify
         {
             $("#notifaction").animate({
                 top: (-parseInt($("#notifaction").css("height"))) - 100 + "px"
-            }, 400, function () => {
+            }, 400, () => {
                 locked = false;
                 if (callback != null)
                 {
@@ -108,7 +108,7 @@ module Utilies
         {
             // if the member is itself an object, then we most also call copy on that
             if (typeof (oldObject[member]) == "object")
-            {   
+            {
                 //FIXME : Should be usig this try catch, fix it later
                 try
                 {
@@ -243,7 +243,7 @@ module Utilies
     //    }
     //};
 
-    
+
 	export function compress(s){
 		var dict = {};
 	    var data = (s + "").split("");
@@ -348,8 +348,8 @@ module TouchUI
     };
 
 
-    export function init() 
-    {      
+    export function init()
+    {
         if (TouchUI.isTouchDevice())
         {
             var fireButtonCssId = "touchFireButton";
@@ -428,7 +428,7 @@ module keyboard
         });
 
         $(window).keyup(function (e)
-        {          
+        {
             delete keys[e.which];
         });
 

@@ -2,7 +2,7 @@
  * NetworkedTimer.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../system/Timer.ts"/>
@@ -29,17 +29,17 @@ class NetworkTimer extends Timer
 
         if (this.packetRateTimer.hasTimePeriodPassed())
         {
-            Client.socket.emit(Events.client.GET_GAME_TIME, '',function (data) =>
+            Client.socket.emit(Events.client.GET_GAME_TIME, '',(data) =>
             {
                 this.currentServerTime = data;
             });
         }
     }
-    
+
 
     //override
     getTimeNow()
-    {             
+    {
         return this.currentServerTime;
     }
 

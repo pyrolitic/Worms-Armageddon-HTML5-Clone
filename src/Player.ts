@@ -1,10 +1,10 @@
 /**
  * Player
- * The player class contains a team objects, which is the team of worms. 
+ * The player class contains a team objects, which is the team of worms.
  * It also defines the controls for the worms movements.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="Team.ts"/>
@@ -26,7 +26,7 @@ class Player
         this.team = new Team(playerId);
 
         // Global window keyup event
-        $(window).keyup(function (e) =>
+        $(window).keyup((e) =>
         {
             // Dectects keyup on fire button
             if (e.which == Controls.fire.keyboard)
@@ -101,9 +101,9 @@ class Player
         if (onlineSpefic && GameInstance.state.getCurrentPlayer() == this && GameInstance.state.hasNextTurnBeenTiggered() == false)
         {
 
-            //Player controls 
-           
-            if (keyboard.isKeyDown(Controls.jump.keyboard, true) || 
+            //Player controls
+
+            if (keyboard.isKeyDown(Controls.jump.keyboard, true) ||
                 this.gamePad.isButtonPressed(0) ||
                 TouchUI.isJumpDown(true))
             {
@@ -118,7 +118,7 @@ class Player
             }
 
             if (keyboard.isKeyDown(Controls.walkLeft.keyboard) ||
-                 this.gamePad.isButtonPressed(14) || 
+                 this.gamePad.isButtonPressed(14) ||
                 this.gamePad.getAxis(0) > 0.5 ||
                 GameInstance.sticks.getNormal(0).x < -0.5)
             {
@@ -126,8 +126,8 @@ class Player
                 Client.sendImmediately(Events.client.CURRENT_WORM_ACTION, new InstructionChain("walkLeft"));
             }
 
-            if (keyboard.isKeyDown(Controls.walkRight.keyboard) || 
-                this.gamePad.isButtonPressed(15) || 
+            if (keyboard.isKeyDown(Controls.walkRight.keyboard) ||
+                this.gamePad.isButtonPressed(15) ||
                 this.gamePad.getAxis(0) > 0.5 ||
                 GameInstance.sticks.getNormal(0).x  > 0.5)
             {
@@ -136,7 +136,7 @@ class Player
             }
 
             if (keyboard.isKeyDown(Controls.aimUp.keyboard) ||
-             this.gamePad.getAxis(2) >= 0.2 || 
+             this.gamePad.getAxis(2) >= 0.2 ||
              this.gamePad.getAxis(3) >= 0.2 ||
               GameInstance.sticks.getNormal(0).y < -0.6)
             {
@@ -145,13 +145,13 @@ class Player
                 Client.sendImmediately(Events.client.CURRENT_WORM_ACTION, new InstructionChain("target.aim", [-0.8]));
             }
 
-            if (keyboard.isKeyDown(Controls.aimDown.keyboard) || 
-                this.gamePad.getAxis(2) <= -0.2 || 
-                this.gamePad.getAxis(3) <= -0.2 || 
+            if (keyboard.isKeyDown(Controls.aimDown.keyboard) ||
+                this.gamePad.getAxis(2) <= -0.2 ||
+                this.gamePad.getAxis(3) <= -0.2 ||
                  GameInstance.sticks.getNormal(0).y > 0.6)
             {
                 var currentWrom = this.team.getCurrentWorm();
-                currentWrom.target.aim(0.8);           
+                currentWrom.target.aim(0.8);
                 Client.sendImmediately(Events.client.CURRENT_WORM_ACTION, new InstructionChain("target.aim", [0.8]));
             }
 
@@ -180,9 +180,9 @@ class Player
 
             // end of player controls
         }
-        
+
          //Finds the worm traveling at the highest velocity and if its over a therosold
-         // the camera will then pan to the position of that worm. 
+         // the camera will then pan to the position of that worm.
          // So when their is an explosion it gives the player somthing interesting and fun to look at
          var fastestWorm : Worm = GameInstance.wormManager.findFastestMovingWorm();
          if (GameInstance.state.physicsWorldSettled && fastestWorm != null && fastestWorm.body.GetLinearVelocity().Length() > 3)
@@ -221,12 +221,12 @@ class Player
 
             //The camera tracks the player while they move
             var currentWorm = this.team.getCurrentWorm();
-           
+
             if (GameInstance.state.physicsWorldSettled && currentWorm.body.GetLinearVelocity().Length() >= 0.1)
             {
 
                 GameInstance.camera.panToPosition(Physics.vectorMetersToPixels(currentWorm.body.GetPosition()));
-            }          
+            }
                 //if the players weapon is active and is a throwable then track it with the camera
             else if ( GameInstance.state.physicsWorldSettled && (this.getTeam().getWeaponManager().getCurrentWeapon() instanceof ThrowableWeapon
                 || this.getTeam().getWeaponManager().getCurrentWeapon() instanceof ProjectileWeapon) &&

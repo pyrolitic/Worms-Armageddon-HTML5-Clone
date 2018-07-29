@@ -2,7 +2,7 @@
  * ForceIndicator.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../animation/Sprite.ts"/>
@@ -13,7 +13,7 @@ class ForceIndicator
     private forceRateIncrease;
     private forceMax;
     private  sprite: Sprite;
-    private  needReRender: bool;
+    private  needReRender: boolean;
     private  renderCanvas;
 
     constructor(maxForceForWeapon)
@@ -39,7 +39,7 @@ class ForceIndicator
 
             if (this.needReRender)
             {
-                this.renderCanvas = Graphics.preRenderer.render(function (context) =>
+                this.renderCanvas = Graphics.preRenderer.render((context) =>
                 {
                     // if(this.renderCanvas == null)
                      //context.fillRect(0, 0, 400, 400);
@@ -64,7 +64,7 @@ class ForceIndicator
                 targetDir.y
             )
 
-             
+
             //TODO - Why do I put -90 in here? Is it that my target is wrong? Is it somthing to do with canvas corrdianate system. Hmm ask Ken.
             //TODO No is cause of the canvas corrdinate system, oh yea.
             ctx.rotate(Utilies.vectorToAngle(worm.target.getTargetDirection().Copy()) + Utilies.toRadians(-90));

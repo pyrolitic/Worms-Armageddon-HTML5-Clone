@@ -1,10 +1,10 @@
 /**
  * Graphics.js
- * Graphics namespace provides helper functions for creating a canvas 
+ * Graphics namespace provides helper functions for creating a canvas
  * it also setup the request animation frame shim and the stats.js fps counter
- * 
+ *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 declare var Stats;
@@ -22,7 +22,7 @@ class PreRenderer
     }
 
     render(drawFunc,width,height, canvas = null)
-    {   
+    {
         width += 2;
         height += 2;
         var ctx;
@@ -36,7 +36,7 @@ class PreRenderer
             ctx = this.createPreRenderCanvas(width, height);
             ctx.translate(1, 1);
         }
-        
+
 
         drawFunc(ctx);
         return ctx.canvas;
@@ -59,7 +59,7 @@ class PreRenderer
 module Graphics
 {
 
-    export var stats;    
+    export var stats;
 
     export var preRenderer = new PreRenderer();
 
@@ -84,7 +84,7 @@ module Graphics
                 (<any>window).webkitRequestAnimationFrame ||
                 (<any>window).mozRequestAnimationFrame ||
                 (<any>window).oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
+                window.requestAnimationFrame ||
             function ( /* function */ callback, /* DOMElement */ element)
             {
                 window.setTimeout(callback, 1000 / 60);

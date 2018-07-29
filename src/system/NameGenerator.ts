@@ -3,7 +3,7 @@
  * The name generator gets a list of famous programmers from wikipeda and randomly assigns them to worms
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="Utilies.ts" />
@@ -15,9 +15,9 @@ module NameGenerator
 {
     //defaults
     var randomNamesList = [
-                   "Anders Hejlsberg", "Ted Henter", "Andy Hertzfeld", "Rich Hickey", "Grace Hopper", "Dave Hyatt", "Miguel de Icaza", "Roberto Ierusalimschy", "Dan Ingalls", 
+                   "Anders Hejlsberg", "Ted Henter", "Andy Hertzfeld", "Rich Hickey", "Grace Hopper", "Dave Hyatt", "Miguel de Icaza", "Roberto Ierusalimschy", "Dan Ingalls",
                    "Toru Iwatani", "Bo Jangeborg", "Paul Jardetzky", "Lynne Jolitz", "William Jolitz", "Bill Joy", "Mitch Kapor", "Phil Katz", "Alan Kay", "Mel Kaye",
-                    "Brian Kernighan", "Dennis Ritchie", "Jim Knopf", "Andre LaMothe", "Leslie Lamport", "Butler Lampson", "Sam Lantinga", "Chris Lattner", "Samuel J Leffler", 
+                    "Brian Kernighan", "Dennis Ritchie", "Jim Knopf", "Andre LaMothe", "Leslie Lamport", "Butler Lampson", "Sam Lantinga", "Chris Lattner", "Samuel J Leffler",
                     "Rasmus Lerdorf", "Linus torvalds"
                 ]
     //List_of_programming_language_researchers
@@ -32,7 +32,7 @@ module NameGenerator
         //$.ajax({
         //    url: nameDataSrc,
         //    dataType: 'jsonp',
-        //    success: function (data) =>
+        //    success: (data) =>
         //    {
         //        randomNamesList = [];
         //        randomNamesList = JSON.stringify(data).match(new RegExp("\\*\\[\\[[A-Z,a-z, ]+]]", "g"))
@@ -46,7 +46,7 @@ module NameGenerator
 
         //        callback();
         //    }
-            
+
         //});
 
     }

@@ -1,10 +1,10 @@
 /// <reference path="../WormAnimationManger.ts" />
 /**
- *  
+ *
  * GameLobby.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 
@@ -72,11 +72,11 @@ class GameLobby
     client_init()
     {
         //Have the host client setup all the player objects with all the other clients ids
-        Client.socket.on(Events.gameLobby.START_GAME_HOST, function (data) =>
+        Client.socket.on(Events.gameLobby.START_GAME_HOST, (data) =>
         {
             var gameLobby = (Utilies.copy(new GameLobby(null, null), data));
             Game.map = new Map(Maps[gameLobby.mapName]);
-            
+
             //Update local copy of the lobby
             GameInstance.lobby.client_GameLobby = gameLobby;
             //Pass player ids to init the game
@@ -89,9 +89,9 @@ class GameLobby
 
         // Start the game for all other playrs by passing the player information create
         // by the host client to them.
-        Client.socket.on(Events.gameLobby.START_GAME_FOR_OTHER_CLIENTS, function (data) =>
+        Client.socket.on(Events.gameLobby.START_GAME_FOR_OTHER_CLIENTS, (data) =>
         {
-             var gameLobby = (Utilies.copy(new GameLobby(null, null), data.lobby));          
+             var gameLobby = (Utilies.copy(new GameLobby(null, null), data.lobby));
              Game.map = new Map(Maps[gameLobby.mapName]);
 
              //Update local copy of the lobby
@@ -142,10 +142,10 @@ class GameLobby
 
     }
 
-    contains(playerId: string) : bool
+    contains(playerId: string) : boolean
     {
         for (var i in this.playerIds)
-        {          
+        {
             if (this.playerIds[i] == playerId)
             {
                 return true;
