@@ -8,12 +8,13 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Physics.ts"/>
-///<reference path="../system/Utilies.ts" />
-///<reference path="TerrainBoundary.ts"/>
-///<reference path="Waves.ts"/>
+import { GameInstance } from "../MainInstance";
+import { b2Vec2, b2FixtureDef, b2PolygonShape, b2BodyDef, b2Body, Physics, b2AABB } from '../system/Physics';
+import { Logger } from '../system/Utilies';
+import { TerrainBoundary } from './TerrainBoundary';
+import {Waves} from './Waves'
 
-class Terrain
+export class Terrain
 {
 
     drawingCanvas: HTMLCanvasElement;
@@ -30,11 +31,11 @@ class Terrain
     boundary: TerrainBoundary;
 
     //Used to batch the deforms to one draw and one box2d regen
-    deformTerrainBatchList = [];
+    deformTerrainBatchList : {xPos: number, yPos: number, radius?: number, width?: number, height?: number}[] = [];
 
     TERRAIN_RECT_HEIGHT: number;
 
-    constructor (canvas, terrainImage, world, scale)
+    constructor (canvas : HTMLCanvasElement, terrainImage : HTMLImageElement, world : any, scale : number)
     {
 
         //this.skyOffset = 350;
@@ -44,7 +45,7 @@ class Terrain
         this.Offset = new b2Vec2(2300, 1300);
 
         this.drawingCanvas = canvas;
-        this.drawingCanvasContext = this.drawingCanvas.getContext("2d");
+        this.drawingCanvasContext = this.drawingCanvas.getContext("2d") as CanvasRenderingContext2D;
 
         this.TERRAIN_RECT_HEIGHT = 5;
 
@@ -55,7 +56,7 @@ class Terrain
         this.bufferCanvas.height =  this.Offset.y+(terrainImage.height*1.5);
         this.boundary = new TerrainBoundary(this.bufferCanvas.width+this.Offset.x, this.bufferCanvas.height+100);
 
-        this.bufferCanvasContext = this.bufferCanvas.getContext('2d');
+        this.bufferCanvasContext = this.bufferCanvas.getContext('2d') as CanvasRenderingContext2D;
 
         this.bufferCanvasContext.fillStyle = 'rgba(0,0,0,255)'; //Setup alpha colour for cutting out terrain
         this.bufferCanvasContext.drawImage(terrainImage, this.Offset.x,  this.Offset.y, this.bufferCanvas.width-this.Offset.x, this.bufferCanvas.height-this.Offset.y);
@@ -79,7 +80,7 @@ class Terrain
     }
 
     // This setup physical bodies from image data
-    createTerrainPhysics(x, y, width, height, data, world, worldScale)
+    createTerrainPhysics(x : number, y : number, width : number, height : number, data : any, world : any, worldScale : number)
     {
         x = Math.floor(x);
         y = Math.floor(y);
@@ -155,12 +156,12 @@ class Terrain
 
     //Adds this deform position to the list so that the deforms
     //can be batched at the end of the update loop
-    addToDeformBatch(x, y, r)
+    addToDeformBatch(x : number, y : number, r : number)
     {
         this.deformTerrainBatchList.push({ xPos: x, yPos: y, radius: r });
     }
 
-    addRectToDeformBatch(x, y, w, h)
+    addRectToDeformBatch(x : number, y : number, w : number, h : number)
     {
         this.deformTerrainBatchList.push({ xPos: x, yPos: y, radius: h, width: w });
     }
@@ -181,10 +182,10 @@ class Terrain
 
             if (tmp.width)
             {
-                this.bufferCanvasContext.fillRect(tmp.xPos - tmp.width / 2, tmp.yPos, tmp.width, tmp.radius);
+                this.bufferCanvasContext.fillRect(tmp.xPos - tmp.width / 2, tmp.yPos, tmp.width, tmp.radius as number);
             } else
             {
-                this.bufferCanvasContext.arc(tmp.xPos, tmp.yPos, tmp.radius, angle, 0, true);
+                this.bufferCanvasContext.arc(tmp.xPos, tmp.yPos, tmp.radius as number, angle, 0, true);
             }
 
 
@@ -201,7 +202,7 @@ class Terrain
         {
 
             var tmp = this.deformTerrainBatchList[i];
-            var normalizedRadis = Math.floor(tmp.radius / this.TERRAIN_RECT_HEIGHT) * this.TERRAIN_RECT_HEIGHT;
+            var normalizedRadis = Math.floor((tmp.radius as number) / this.TERRAIN_RECT_HEIGHT) * this.TERRAIN_RECT_HEIGHT;
             var y = Math.floor(tmp.yPos / this.TERRAIN_RECT_HEIGHT) * this.TERRAIN_RECT_HEIGHT;
 
             //Setup bounding box, to check which terrain rects intercest the box and need to be removed and recreated.
@@ -216,7 +217,7 @@ class Terrain
                 Physics.pixelToMeters( y + normalizedRadis)
             );
 
-            Physics.world.QueryAABB((fixture) =>
+            Physics.world.QueryAABB((fixture : any) =>
             {
                 if (fixture.GetBody().GetType() == b2Body.b2_staticBody && fixture.GetBody().GetUserData() instanceof Terrain)
                 {
@@ -248,7 +249,7 @@ class Terrain
         this.wave.update();
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         //this.drawingCanvasContext.clearRect(0, 0, this.drawingCanvas.width, this.drawingCanvas.height);
 

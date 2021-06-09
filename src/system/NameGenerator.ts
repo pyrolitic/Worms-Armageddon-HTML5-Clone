@@ -8,10 +8,12 @@
  */
 ///<reference path="Utilies.ts" />
 
+import { Utilies } from "./Utilies";
+
 
 //TODO This is Kinda redundent
 
-module NameGenerator
+export module NameGenerator
 {
     //defaults
     var randomNamesList = [
@@ -26,7 +28,7 @@ module NameGenerator
     // var nameDataSrc = "wikilocal.html";
 
 
-    export function init(callback)
+    export function init(callback : CallableFunction)
     {
 
         //$.ajax({

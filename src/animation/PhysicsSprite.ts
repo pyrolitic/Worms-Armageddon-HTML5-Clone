@@ -3,24 +3,20 @@
  * This is handies sprite that also need to animate interm of movement and physics
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
-///<reference path="../system/Physics.ts" />
+import { b2Vec2 } from "../system/Physics";
+import { Sprite } from "./Sprite";
+import { SpriteDefinition } from "./SpriteDefinitions";
 
-class PhysicsSprite extends Sprite
+export class PhysicsSprite extends Sprite
 {
     velocity;
     position;
-    acc;
+    acc : any;
 
-    constructor (initalPos, initalVelocity, spriteDef)
+    constructor (initalPos : any, initalVelocity : any, spriteDef: SpriteDefinition)
     {
         super(spriteDef);
         this.position = initalPos;
@@ -28,7 +24,7 @@ class PhysicsSprite extends Sprite
        
     }
 
-    draw(ctx,x = this.position.x, y  = this.position.y)
+    draw(ctx: CanvasRenderingContext2D,x = this.position.x, y  = this.position.y)
     {
         super.draw(ctx, x,y);
     }

@@ -1,14 +1,14 @@
+import { b2Vec2 } from "./Physics";
+
 /**
  * Camera.js
  * This controls the viewport
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Utilies.ts"/>
-
-class Camera
+export class Camera
 {
 
     position;
@@ -21,7 +21,7 @@ class Camera
     panSpeed;
     toPanOrNotToPan;
 
-    constructor (levelWidth, levelHeight, vpWidth, vpHeight)
+    constructor (levelWidth : number, levelHeight : number, vpWidth : number, vpHeight : number)
     {
         this.levelWidth = levelWidth;
         this.levelHeight = levelHeight;
@@ -75,7 +75,7 @@ class Camera
     }
 
  
-    panToPosition(vector)
+    panToPosition(vector : any)
     {
             // Center on said position
             vector.x -= this.vpWidth / 2;

@@ -3,20 +3,26 @@
 ///<reference path="../system/AssetManager.ts" />
 ///<reference path="ForceIndicator.ts" />
 
-class BaseWeapon
+import { SpriteDefinition } from "../animation/SpriteDefinitions";
+import { AssetManager } from "../system/AssetManager";
+import { Logger } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { ForceIndicator } from "./ForceIndicator";
+
+export class BaseWeapon
 {
-    ammo;
-    name;
-    iconImage;
-    isActive;
-    worm: Worm;
+    ammo : number;
+    name : string;
+    iconImage : HTMLImageElement;
+    isActive : boolean = false;
+    worm: Worm | null = null;
     takeOutAnimations: SpriteDefinition;
     takeAimAnimations: SpriteDefinition;
     forceIndicator: ForceIndicator;
 
     requiresAiming: boolean;
 
-    constructor(name: string, ammo: number, iconSprite, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
+    constructor(name: string, ammo: number, iconSprite : SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
     {
         this.name = name;
         this.ammo = ammo;
@@ -39,14 +45,14 @@ class BaseWeapon
     }
 
     getIsActive() { return this.isActive; }
-    setIsActive(val) { this.isActive = val; }
+    setIsActive(val : boolean) { this.isActive = val; }
 
     deactivate()
     {
 
     }
 
-    activate(worm)
+    activate(worm : Worm)
     {
 
         this.setIsActive(true);
@@ -58,6 +64,6 @@ class BaseWeapon
     }
 
     update() { }
-    draw(ctx) { }
+    draw(ctx : CanvasRenderingContext2D) { }
 }
 

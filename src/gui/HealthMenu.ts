@@ -2,18 +2,17 @@
  * HealthMenu.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Main.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Settings.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Controls.ts"/>
-class HealthMenu
+import { Player } from "../Player";
+import { Settings } from "../Settings";
+import { Team } from "../Team";
+
+export class HealthMenu
 {
 
-    constructor (players)
+    constructor (players : Player[])
     {
         var html = "";
 

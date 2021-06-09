@@ -1,5 +1,6 @@
 ﻿<!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
@@ -10,20 +11,23 @@
     <link rel="stylesheet" href="css/custom.css" type="text/css" />
 
     <!-- External deps -->
-    <script src="external/jquery.1.8.2.min.js"></script>
+    <!--script src="external/socket.io.min.js"></script-->
+    <script src="node_modules/socket.io-client/dist/socket.io.min.js"></script>
+    <!--script src="external/jquery.1.8.2.min.js"></script-->
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="external/Box2dWeb-2.1.a.3.min.js"></script>
     <script src="external/Stats.js"></script>
     <script src="external/bootstrap.min.js"></script>
 
-    <!-- None complied js files -->
-    <script src="src/audio/SoundBufferLoader.js"></script>
-
     <!-- Complied Typescript Javascript -->
-    <script src="src/Worm.js"></script>
+    <script type="module" src="out/src/main.js"></script>
 
     <!-- Socket.io -->
     <!-- script src="http://96.126.111.211:8080/socket.io/socket.io.js"></script-->
+
+    <!--script src="dist/bundle.js"></script-->
 </head>
+
 <body>
     <div class="alert" id="notifaction"><strong></strong>
         <p></p>
@@ -75,9 +79,8 @@
             <h1 style="text-align: center">Worms Armageddon HTML5 Clone</h1>
             <br />
             <p>
-                Welcome to a recreation of <a href="http://www.team17.com/">Team17's</a> turn-based artillery strategy worms armageddon.
-                All copyright and credit for the art/sound assets belongs to <a href="http://www.team17.com/">Team17</a>
-                and for making such an awesome game in the first place. This clone is currently under development by <a href="http://www.ciaranmccann.me/">Ciarán McCann</a> as part of his final year on the <a href="http://www.itcarlow.ie/study-at-itc/science/computing-networking/cw208.htm">IT Carlow Games Development</a> course.
+                Welcome to a recreation of <a href="http://www.team17.com/">Team17's</a> turn-based artillery strategy worms armageddon. All copyright and credit for the art/sound assets belongs to <a href="http://www.team17.com/">Team17</a> and for making
+                such an awesome game in the first place. This clone is currently under development by <a href="http://www.ciaranmccann.me/">Ciarán McCann</a> as part of his final year on the <a href="http://www.itcarlow.ie/study-at-itc/science/computing-networking/cw208.htm">IT Carlow Games Development</a>                course.
                 <a href="http://www.ciaranmccann.me/">Read more..</a>
             </p>
             <br />
@@ -94,4 +97,7 @@
                 <ul></ul>
             </div>
 
-            </script></body></html>
+            </script>
+</body>
+
+</html>

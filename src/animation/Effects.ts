@@ -5,23 +5,22 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="Sprite.ts"/>
+import { GameInstance } from "../MainInstance";
+import { AssetManager } from "../system/AssetManager";
+import { b2Body, Physics } from "../system/Physics";
+import { Utilies } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { ParticleEffect } from "./ParticleEffect";
 
-module Effects
+export module Effects
 {
 
-    export function explosion(epicenter,
-        explosionRadius,
-        effectedRadius,
-        explosiveForce,
-        maxDamage,
-        entityThatCausedExplosion = null,
+    export function explosion(epicenter : any,
+        explosionRadius : number,
+        effectedRadius : number,
+        explosiveForce : number,
+        maxDamage : number,
+        entityThatCausedExplosion : any = null,
         soundEffectToPlay = AssetManager.getSound("explosion" + Utilies.random(1, 3)),
         particleEffectType = ParticleEffect,
        )
@@ -34,7 +33,7 @@ module Effects
         Physics.applyToNearByObjects(
             epicenter,
             effectedRadius,
-            (fixture, epicenter) =>
+            (fixture : any, epicenter : any) =>
             {
                 // Applys force to all the bodies in the radius
                 if (fixture.GetBody().GetType() != b2Body.b2_staticBody && fixture.GetBody().GetUserData() instanceof Worm)

@@ -8,11 +8,11 @@
  * mySpriteObj.setSpriteDef(Sprites.worms.walking);
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 
-interface SpriteDefinition
+export interface SpriteDefinition
 {
     imageName: string;
     frameY: number;
@@ -22,10 +22,10 @@ interface SpriteDefinition
 
 
 // -1 for msPerFrame means no animation
-module Sprites
+export module Sprites
 {
 
-    export var weaponIcons = {
+    export var weaponIcons : {[key: string] : any} = {
 
         holyGernade: { imageName: "iconhgrenade" },
         gernade: { imageName: "icongrenade" },
@@ -42,7 +42,7 @@ module Sprites
 
     };
 
-    export var weapons = {
+    export var weapons : {[key: string] : SpriteDefinition} = {
 
         jetPackFlamesDown: {
 
@@ -146,8 +146,10 @@ module Sprites
 
     }
 
+   
+
     // These are defined frames for said animations
-    export var worms = {
+    export var worms : {[key: string] : SpriteDefinition} = {
 
         idle1: {
 
@@ -467,7 +469,7 @@ module Sprites
     }
 
 
-    export var particleEffects = {
+    export var particleEffects : {[key: string] : SpriteDefinition} = {
 
         eclipse: {
 

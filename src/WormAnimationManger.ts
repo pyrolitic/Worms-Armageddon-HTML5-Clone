@@ -16,7 +16,16 @@
 ///<reference path="Main.ts" />
 ///<reference path="Worm.ts" />
 
-class WormAnimationManger
+import { Effects } from "./animation/Effects";
+import { ToostMessage } from "./animation/HealthReduction";
+import { Sprites } from "./animation/SpriteDefinitions";
+import { GameInstance } from "./MainInstance";
+import { Physics } from "./system/Physics";
+import { Timer } from "./system/Timer";
+import { Utilies } from "./system/Utilies";
+import { Worm } from "./Worm";
+
+export class WormAnimationManger
 {
     static WORM_STATE = {
 
@@ -33,7 +42,7 @@ class WormAnimationManger
 
     worm: Worm;
     idleTimer: Timer;
-    currentState;
+    currentState : number;
     previouslySelectedWeapon;
 
     constructor (worm: Worm)
@@ -44,7 +53,7 @@ class WormAnimationManger
         this.previouslySelectedWeapon = this.worm.team.getWeaponManager().getCurrentWeapon();
     }
 
-    setState(state)
+    setState(state : number)
     {
         this.currentState = state;
     }

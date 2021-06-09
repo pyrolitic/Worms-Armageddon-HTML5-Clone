@@ -1,27 +1,34 @@
+
 /**
  * NinjaRope.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../environment/Terrain.ts"/>
-///<reference path="BaseWeapon.ts"/>
-
-class NinjaRope extends BaseWeapon
+ import { Sprite } from "../animation/Sprite";
+import { Sprites } from "../animation/SpriteDefinitions";
+ import { Client } from "../networking/Client";
+import { Events } from "../networking/Events";
+import { InstructionChain } from "../networking/InstructionChain";
+ import { AssetManager } from "../system/AssetManager";
+import { Controls } from "../system/Controls";
+import { Physics, b2FixtureDef, b2PolygonShape, b2BodyDef, b2Body, b2CircleShape, b2DistanceJointDef } from "../system/Physics";
+import { keyboard, Utilies } from "../system/Utilies";
+ import { Worm } from "../Worm";
+ import { BaseWeapon } from "./BaseWeapon";
+ 
+export class NinjaRope extends BaseWeapon
 {
-    ropeJoints;
-    ropeNots;
-    anchor;
-    lastRopeDef;
-    playerJoint;
+    ropeJoints : any;
+    ropeNots : any;
+    anchor : any;
+    lastRopeDef : any;
+    playerJoint : any;
 
     ropeTip: Sprite;
 
-    constructor (ammo)
+    constructor (ammo : number)
     {
         super(
            "Ninja Rope",
@@ -193,7 +200,7 @@ class NinjaRope extends BaseWeapon
 
 
             this.lastRopeDef.bodyA = this.ropeNots[this.ropeNots.length - 1];
-            this.lastRopeDef.bodyB = this.worm.body;
+            this.lastRopeDef.bodyB = (this.worm as Worm).body;
 
 
             var joint = Physics.world.CreateJoint(this.lastRopeDef);
@@ -222,11 +229,11 @@ class NinjaRope extends BaseWeapon
 
             var bd = new b2BodyDef();
             bd.type = b2Body.b2_dynamicBody;
-            var direction = this.worm.body.GetPosition().Copy();
+            var direction = (this.worm as Worm).body.GetPosition().Copy();
             var wormPos = lastBody.GetPosition().Copy();
             wormPos.Subtract(direction);
             wormPos.Multiply(0.8);
-            wormPos.Add(this.worm.body.GetPosition());
+            wormPos.Add((this.worm as Worm).body.GetPosition());
             bd.position.SetV(wormPos);
 
             var nextBody = Physics.world.CreateBody(bd)
@@ -243,7 +250,7 @@ class NinjaRope extends BaseWeapon
             this.ropeJoints.push(joint);
             joint.SetLength(0.3);
             this.lastRopeDef.bodyA = nextBody;
-            this.lastRopeDef.bodyB = this.worm.body;
+            this.lastRopeDef.bodyB = (this.worm as Worm).body;
             this.playerJoint = Physics.world.CreateJoint(this.lastRopeDef)
             this.ropeJoints.push(this.playerJoint);
 
@@ -254,7 +261,7 @@ class NinjaRope extends BaseWeapon
 
 
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         if (this.getIsActive())
         {
@@ -302,7 +309,7 @@ class NinjaRope extends BaseWeapon
             context.stroke();
 
             var p1 = Physics.vectorMetersToPixels(this.ropeNots[this.ropeNots.length - 1].GetPosition());
-            var p2 = Physics.vectorMetersToPixels(this.worm.body.GetPosition());
+            var p2 = Physics.vectorMetersToPixels((this.worm as Worm).body.GetPosition());
             context.beginPath(); // Start the path
             context.moveTo(p1.x, p1.y); // Set the path origin
             context.lineTo(p2.x, p2.y); // Set the path destination

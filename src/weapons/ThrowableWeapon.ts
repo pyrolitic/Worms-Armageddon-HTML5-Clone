@@ -7,21 +7,23 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../environment/Terrain.ts"/>
-///<reference path="BaseWeapon.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="../animation/Sprite.ts"/>
-///<reference path="../animation/Effects.ts"/>
+import { Effects } from "../animation/Effects";
+import { Sprite } from "../animation/Sprite";
+import { SpriteDefinition } from "../animation/SpriteDefinitions";
+import { GameInstance } from "../MainInstance";
+import { AssetManager } from "../system/AssetManager";
+import { Graphics } from "../system/Graphics";
+import { Physics, b2FixtureDef, b2CircleShape, b2BodyDef, b2Body } from "../system/Physics";
+import { Timer } from "../system/Timer";
+import { Logger, Utilies } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { BaseWeapon } from "./BaseWeapon";
 
-class ThrowableWeapon extends BaseWeapon
+export class ThrowableWeapon extends BaseWeapon
 {
     static DENSITY = 50;
-    body;
-    fixture;
+    body : any;
+    fixture : any;
     hasImpacted;
     impactSound;
 
@@ -38,7 +40,7 @@ class ThrowableWeapon extends BaseWeapon
     {
         var timerBoxWidth = 20;
         var timerBoxHeight = 22
-        return Graphics.preRenderer.render((ctx) =>
+        return Graphics.preRenderer.render((ctx : CanvasRenderingContext2D) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -53,7 +55,7 @@ class ThrowableWeapon extends BaseWeapon
     }
     static numberBox = ThrowableWeapon.preRender();
 
-    constructor (name, ammo, iconSpriteDef, weaponSpriteDef: SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
+    constructor (name : string, ammo : number, iconSpriteDef : SpriteDefinition, weaponSpriteDef: SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
     {
         super(
             name,
@@ -93,7 +95,7 @@ class ThrowableWeapon extends BaseWeapon
     }
 
       // What happens when a worm collies with another object
-    beginContact(contact)
+    beginContact(contact : any)
     {
         if (this.hasImpacted == 0)
         {
@@ -103,7 +105,7 @@ class ThrowableWeapon extends BaseWeapon
     }
 
     //What happens when a worm is no longer in contact with the object it was in contact with
-    endContact(contact)
+    endContact(contact : any)
     {
         this.hasImpacted--;
     }
@@ -115,7 +117,11 @@ class ThrowableWeapon extends BaseWeapon
         super.deactivate();
     }
 
-    setupPhysicsBodies(initalPosition, initalVelocity)
+    throwFar() {
+        return true;
+    }
+
+    setupPhysicsBodies(initalPosition : any, initalVelocity : any)
     {
         // Setup of physical body
         var image = this.sprite.getImage();
@@ -130,7 +136,7 @@ class ThrowableWeapon extends BaseWeapon
         bodyDef.type = b2Body.b2_dynamicBody;
         bodyDef.position = initalPosition;
 
-        if ( (this instanceof Dynamite) == false)
+        if (this.throwFar())
         {
             bodyDef.angle = Utilies.vectorToAngle(initalVelocity);
         }
@@ -139,7 +145,7 @@ class ThrowableWeapon extends BaseWeapon
         this.body = this.fixture.GetBody();
         this.body.SetLinearVelocity(initalVelocity);
 
-        if ((this instanceof Dynamite) == false)
+        if (this.throwFar())
         {
             //Visual hack, as box2d doesn't have air resistence
             //objects won't rotate in the air, so add some AngularVelcoity.
@@ -213,7 +219,7 @@ class ThrowableWeapon extends BaseWeapon
         Physics.world.DestroyBody(this.body);
 
         this.deactivate();
-        this.worm.team.weaponManager.getListOfWeapons()[6].deactivate();
+        (this.worm as Worm).team.weaponManager.getListOfWeapons()[6].deactivate();
     }
 
     update()
@@ -231,7 +237,7 @@ class ThrowableWeapon extends BaseWeapon
     }
 
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
 
         if (this.getIsActive())
@@ -258,14 +264,14 @@ class ThrowableWeapon extends BaseWeapon
             ctx.drawImage(ThrowableWeapon.numberBox, 10,-40);
             ctx.fillStyle = 'rgba(255,0,0,255)';
 
-            var secoundsLeft =  Math.floor(this.detonationTimer.getTimeLeftInSec() / 10);
+            var secoundsLeft = Math.floor(this.detonationTimer.getTimeLeftInSec() / 10);
 
             if (secoundsLeft < 0)
             {
                 secoundsLeft = 0;
             }
 
-            ctx.fillText(secoundsLeft, 22,-22);
+            ctx.fillText(secoundsLeft.toString(), 22,-22);
 
 
             ctx.restore()

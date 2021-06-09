@@ -4,13 +4,16 @@
  * allows them to start the game and shows them the controls.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Settings.ts" />
-///<reference path="../system/Utilies.ts"/>
+import { Map, Maps } from "../environment/Maps";
+import { Game } from "../Game";
+import { AssetManager } from "../system/AssetManager";
+import { StringFormat } from '../system/Utilies';
 
-class SettingsMenu
+
+export class SettingsMenu
 {
     view;
     levelName;
@@ -34,19 +37,19 @@ class SettingsMenu
         this.view += '</ul></div><p style="text-align: center"> All map images were sourced from <a href="http://wmdb.org/">http://wmdb.org/</a></p></div>';
     }
 
-    addMapItem(map : any, name)
+    addMapItem(map : any, name : string)
     {
-        var item: String = '<li class="span4" style="width:30%"><a href="#" class="thumbnail" id={1}>' +
+        var item: string = '<li class="span4" style="width:30%"><a href="#" class="thumbnail" id={1}>' +
                            '<img style="width: 160px; height: 80px;" src={0}> </a></li>';
 
-        item = item.format(AssetManager.getImage(map.smallImage).src,name);
+        item = StringFormat(item, AssetManager.getImage(map.smallImage).src, name);
         return item;
     }
 
-    bind(callback)
+    bind(callback : CallableFunction)
     {
         var _this = this;
-        $('a.thumbnail').click(function()
+        $('a.thumbnail').click(() =>
         {
             var levelId = $(this).attr('id');
             $('a.thumbnail').css({ "background": "white" });

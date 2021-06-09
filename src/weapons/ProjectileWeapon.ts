@@ -4,31 +4,36 @@
  * thats the main different between them and throwable weapons
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="BaseWeapon.ts"/>
+import { Effects } from "../animation/Effects";
+import { ParticleEffect } from "../animation/ParticleEffect";
+import { Sprite } from "../animation/Sprite";
+import { SpriteDefinition, Sprites } from "../animation/SpriteDefinitions";
+import { GameInstance } from "../MainInstance";
+import { Physics, b2FixtureDef, b2CircleShape, b2BodyDef, b2Body } from "../system/Physics";
+import { Utilies, Logger } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { BaseWeapon } from "./BaseWeapon";
 
-class ProjectileWeapon extends BaseWeapon
+export class ProjectileWeapon extends BaseWeapon
 {
 
-    body;
-    fixture;
-    image;
-    listener;
-    terrainRef;
-    effectedRadius;
-    explosiveForce;
-    explosionRadius;
-    isLive;
+    body : any;
+    fixture : any;
+    image : HTMLImageElement | null = null;
+    listener : any;
+    terrainRef : any;
+    effectedRadius : number;
+    explosiveForce : number;
+    explosionRadius : number;
+    isLive : boolean = false;
     maxDamage: number;
 
     projectileSprite: Sprite;
 
-    constructor (name : string, ammo : number, iconSpriteDef, weaponSpriteDef: SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
+    constructor (name : string, ammo : number, iconSpriteDef: SpriteDefinition, weaponSpriteDef: SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
     {
         super(
             name,
@@ -75,7 +80,7 @@ class ProjectileWeapon extends BaseWeapon
 
     }
 
-     setupPhysicsBodies(initalPosition, initalVelocity)
+     setupPhysicsBodies(initalPosition : any, initalVelocity : any)
      {
 
         // Setup of physical body
@@ -112,7 +117,7 @@ class ProjectileWeapon extends BaseWeapon
         Physics.addToFastAcessList(this.body);
     }
 
-    beginContact(contact)
+    beginContact(contact : any)
     {
         if (this.isActive && this.isLive)
         {
@@ -163,7 +168,7 @@ class ProjectileWeapon extends BaseWeapon
         } 
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         if (this.isActive && this.isLive)
         {
@@ -190,10 +195,10 @@ class ProjectileWeapon extends BaseWeapon
 }
 
 
-class Bazzoka extends ProjectileWeapon
+export class Bazzoka extends ProjectileWeapon
 {
 
-    constructor(ammo)
+    constructor(ammo : number)
     {
         super(
             "Bazooka",

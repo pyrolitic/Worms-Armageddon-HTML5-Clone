@@ -8,7 +8,11 @@
  */
 ///<reference path="../Game.ts"/>
 
-class LeaderBoardView
+import { Settings } from "../Settings";
+import { LobbyMenu } from "./LobbyMenu";
+
+
+export class LeaderBoardView
 {
     private leaderBoardView: string;
     private profileView: string;
@@ -40,7 +44,7 @@ class LeaderBoardView
         return this.profileView;
     }
 
-    populateTable(userData)
+    populateTable(userData : any)
     {
         $(LeaderBoardView.CSS_ID.LEADERBOARDS_TABLE).empty()
 
@@ -58,10 +62,10 @@ class LeaderBoardView
     update()
     {
 
-        var callback = (leaderBoardData) => {
+        var callback = (leaderBoardData : any) => {
 
             var leaderBoardData = JSON.parse(leaderBoardData);
-            var combinedUserData = [];
+            var combinedUserData : {[key: string]: {image: string, name:string, score:number}} = {};
             var dataLoadCount = 0;
 
             for (var player in leaderBoardData)
@@ -73,7 +77,7 @@ class LeaderBoardView
                 $.ajax({
                     url: url,
                     dataType: 'jsonp',
-                    success: (userDataFromGoogle) =>
+                    success: (userDataFromGoogle : any) =>
                     {
                         //If a users account has been disabled this will be null
                         if (userDataFromGoogle.id)

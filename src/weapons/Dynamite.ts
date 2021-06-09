@@ -1,14 +1,20 @@
-///<reference path="BaseWeapon.ts"/>
-///<reference path="ThrowableWeapon.ts"/>
+import { Sprites } from "../animation/SpriteDefinitions";
+import { AssetManager } from "../system/AssetManager";
+import { Physics, b2Vec2 } from "../system/Physics";
+import { Utilies } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { ThrowableWeapon } from "./ThrowableWeapon";
 
-class Dynamite extends ThrowableWeapon
+export class Dynamite extends ThrowableWeapon
 {
 
-    constructor (ammo)
+    constructor (ammo : number)
     {
         //Modify the takeout animation, to be used as its idel animation or aiming animations
         // though you don't aim dynamaie. It just happens to be easy subclass of Throwable
-        var modifedSpriteDef = Utilies.copy( new Object(), Sprites.worms.takeOutDynamite);
+        var modifedSpriteDef = Utilies.copy(
+            {imageName: "", frameY: 0, frameCount: 0, msPerFrame: 0},
+            Sprites.worms.takeOutDynamite);
         modifedSpriteDef.frameY = modifedSpriteDef.frameCount-1;
 
         super(
@@ -53,6 +59,9 @@ class Dynamite extends ThrowableWeapon
         this.body.SetFixedRotation(true);
     }
 
+    throwFar() {
+        return false;
+    }
 
     update()
     {

@@ -2,20 +2,23 @@
  * WormManager.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Camera.ts"/>
-///<reference path="system/Graphics.ts"/>
-///<reference path="system/AssetManager.ts"/>
-///<reference path="system/Physics.ts"/>
-///<reference path="Worm.ts"/>
-///<reference path="system/Utilies.ts"/>
-///<reference path="system/Timer.ts" />
-///<reference path="Settings.ts" />
+
+import { GameInstance } from "./MainInstance";
+import { Client } from "./networking/Client";
+import { Events } from "./networking/Events";
+import { InstructionChain } from "./networking/InstructionChain";
+import { Player } from "./Player";
+import { Logger } from "./system/Utilies";
+import { ProjectileWeapon } from "./weapons/ProjectileWeapon";
+import { ThrowableWeapon } from "./weapons/ThrowableWeapon";
+import { Worm } from "./Worm";
+import { WormAnimationManger } from "./WormAnimationManger";
 
 
-class WormManager
+export class WormManager
 {
 
     allWorms: Worm[];
@@ -35,7 +38,7 @@ class WormManager
             }
         }
 
-        Logger.log( this.allWorms);
+        Logger.log( this.allWorms.toString());
     }
 
     findWormWithName(name: string)
@@ -49,6 +52,7 @@ class WormManager
         }
 
         Logger.error("Unable to find worm with name " + name);
+        return null;
     }
 
     // are all the worms completely finished, animations, health reduction, actions etc.
@@ -75,7 +79,7 @@ class WormManager
     findFastestMovingWorm()
     {
         var highestVecloity = 0;
-        var wormWithHighestVelocity : Worm = null;
+        var wormWithHighestVelocity : Worm | null = null;
         var lenght = 0;
 
         for (var i = this.allWorms.length-1; i >= 0; --i)
@@ -144,7 +148,7 @@ class WormManager
         return true;
     }
 
-    syncHit(wormName,damage)
+    syncHit(wormName : string | any[], damage : number)
     {
         if (Client.isClientsTurn())
         {
@@ -153,16 +157,16 @@ class WormManager
 
         } else
         {
-            var damage = wormName[1];
-            var wormName = wormName[0];
+            var dm = wormName[1];
+            var wn = wormName[0];
 
-           var worm : Worm =  GameInstance.wormManager.findWormWithName(wormName);
+           var worm : Worm | null=  GameInstance.wormManager.findWormWithName(wn);
 
-           if (worm)
-           {
-               worm.damageTake += damage;
-               worm.hit(0, null);
-           }
+            if (worm)
+            {
+                worm.damageTake += dm;
+                worm.hit(0, null);
+            }
                
         }
     }

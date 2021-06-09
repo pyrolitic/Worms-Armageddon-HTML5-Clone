@@ -1,61 +1,61 @@
 ///<reference path="../Settings.ts" />
 ///<reference path="../system/Timer.ts" />
-declare var test, ok, equal, notEqual, asyncTest, start,QUnit
+//declare var test, ok, equal, notEqual, QUnit.test, start,QUnit
+
+import {test} from 'qunit';
+import { b2Vec2 } from '../system/Physics';
+import { Utilies } from '../system/Utilies';
 
 QUnit.module( "Timer.js" );
-asyncTest( "Asynchronous", function() {
-     
+test("Asynchronous", (assert) => {
     var timePeroid = 1000;
     var t = new Timer(timePeroid);
-     
     
-    setTimeout(function() => {
+    setTimeout(() => {
         t.update();
-        notEqual(t.getTimeLeft(), timePeroid , "getTimeLeft()");
-        equal(t.hasTimePeriodPassed(), true,"hasTimePeriodPassed()");
-        equal(t.getTimeLeft(), timePeroid , "getTimeLeft()");
+        assert.notEqual(t.getTimeLeft(), timePeroid , "getTimeLeft()");
+        assert.equal(t.hasTimePeriodPassed(), true,"hasTimePeriodPassed()");
+        assert.equal(t.getTimeLeft(), timePeroid , "getTimeLeft()");
 
-        start();
+        QUnit.start();
     }, timePeroid+200);
 });
 
-
-
-asyncTest( "Reset", function() {
+test("Reset", (assert) => {
      
     var timePeroid = 1000;
     var t = new Timer(timePeroid);
      
     
-    setTimeout(function() => {
+    setTimeout(() => {
         t.update();
-        notEqual(t.getTimeLeft(), timePeroid , "getTimeLeft()");
+        assert.notEqual(t.getTimeLeft(), timePeroid , "getTimeLeft()");
         t.reset();
-        equal(t.getTimeLeft(), timePeroid , "getTimeLeft()");
+        assert.equal(t.getTimeLeft(), timePeroid , "getTimeLeft()");
 
-        start();
+        QUnit.start();
     }, timePeroid);
 });
 
-asyncTest( "time lenght", function() {
+test( "time lenght", (assert) => {
      
     var timePeroid = 5000;
     var t = new Timer(timePeroid+1);
      
     
-    setTimeout(function() => {
+    setTimeout(() => {
         t.update();
-        equal(t.getTimeLeft(), 0 , "getTimeLeft()");
+        assert.equal(t.getTimeLeft(), 0 , "getTimeLeft()");
 
 
-        start();
+        QUnit.start();
     }, timePeroid);
 });
 
 
 
 QUnit.module( "Utitlies" );
-test( " remove item from array ", function() {
+test( " remove item from array ", (assert) => {
      
     var arr = [1,2,3,4,5];
      
@@ -64,43 +64,43 @@ test( " remove item from array ", function() {
     var t = arr[1] == 3 && arr[3] == null;
 
 
-    ok(t);
+    assert.ok(t);
 });
 
-test( " Angle converts ", function() {
+test( " Angle converts ", (assert) => {
      
     var angleInDegrees = 45;
     var angleInRadins = 0.7853981633974483;
 
-    equal(Utilies.toRadians(angleInDegrees),angleInRadins, "Degrees to radins " );
-    equal(Utilies.toDegrees(angleInRadins),angleInDegrees, " radins to degrees " );
+    assert.equal(Utilies.toRadians(angleInDegrees),angleInRadins, "Degrees to radins " );
+    assert.equal(Utilies.toDegrees(angleInRadins),angleInDegrees, " radins to degrees " );
 
 });
 
-test( " angles  to vectors ", function() {
+test( " angles  to vectors ", (assert) => {
      
     var angleInRadins = Utilies.toRadians(0);
     var v = Utilies.angleToVector(angleInRadins)
 
-    equal(v.x,1);
-    equal(v.y,0);
+    assert.equal(v.x,1);
+    assert.equal(v.y,0);
 
     var angleInRadins = Utilies.toRadians(45);
     var v = Utilies.angleToVector(angleInRadins)
 
-    equal(v.x,0.7071067811865476);
-    equal(v.y,0.7071067811865475);
+    assert.equal(v.x,0.7071067811865476);
+    assert.equal(v.y,0.7071067811865475);
 
 });
 
 
-test( " vectors to angles  ", function() {
+test( " vectors to angles  ", (assert) => {
      
    
     var v = new b2Vec2(0.7, 0.7);
     var angle = Utilies.vectorToAngle(v);
 
-    equal(angle,Utilies.toRadians(45));
+    assert.equal(angle,Utilies.toRadians(45));
    
 });
 

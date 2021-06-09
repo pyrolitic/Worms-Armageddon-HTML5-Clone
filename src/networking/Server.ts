@@ -6,50 +6,37 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-//<reference path="../../external/socket.io-0.9.d.ts"/>
-///<reference path="ServerUtilies.ts"/>
-///<reference path="GameLobby.ts"/>
-///<reference path="Events.ts"/>
-///<reference path="Lobby.ts"/>
-///<reference path="BandwidthMonitor.ts"/>
-declare var require
-declare var Util;
 
-//var io;
+import {createServer, Server as HttpServer} from "http";
+import * as express from "express";
+import {Server, Socket} from "socket.io";
+import { Events, } from './Events';
+import { ServerLobby } from "./ServerLobby";
+import { ServerSettings } from "./ServerSettings";
 
-// HACK
-// Had to give up the benfits of types in this instance, as a problem with the way ES6 proposal module system
-// works with Node.js modules. http://stackoverflow.com/questions/13444064/typescript-conditional-module-import-export
-try
+export class GameServer
 {
-    var Events = require('./Events');
-    var ServerUtilies = require('./ServerUtilies');
-    var GameLobby = require('./GameLobby');
-    var ServerSettings = require('./ServerSettings');
-    var Lobby = require('./Lobby');
-    var Util = require('util');
-    var BandwidthMonitor = require('./BandwidthMonitor');
+    io: Server;
+    lobby: ServerLobby;
+    //bandwidthMonitor;
 
-
-} catch (error) { }
-
-class GameServer
-{
-
-    lobby: Lobby;
-    bandwidthMonitor;
-
-    constructor (port)
+    constructor (server : HttpServer)
     {
-        this.bandwidthMonitor = new BandwidthMonitor(true);
-        io = require('socket.io').listen(port);
-        this.lobby = new Lobby();
+        //this.bandwidthMonitor = new BandwidthMonitor(true);       
+        this.io = new Server(server, {
+            cors: {
+                origin: ServerSettings.ORIGIN,
+                //methods: ["GET", "POST"],
+            }
+        });
+        this.lobby = new ServerLobby();
 
-        io.sockets.on('connection', (socket) =>
+        this.io.on('connection', (socket : Socket) =>
         {
-            this.lobby.onConnection(socket,io);
-            this.lobby.server_init(socket,io);
-            this.lobby.onDisconnection(socket,io);
+            console.log("connection from", socket.handshake.address);
+            this.lobby.onConnection(socket,this.io);
+            this.lobby.init(socket,this.io);
+            this.lobby.onDisconnection(socket,this.io);
 
             //This allows the clients to get the  current time of the server
             socket.on(Events.client.GET_GAME_TIME, (msg,func) =>
@@ -57,20 +44,23 @@ class GameServer
                 func(Date.now());
             });
         });
-
-        this.init();
     }
 
     init()
     {
         // Setup a default lobby
-         //this.lobby.server_createGameLobby("Default", 2);
+        this.lobby.createGameLobby("Default", 2, "priates");
+        
     }
-
 }
 
+var app = express();
+var http = createServer(app);
+export let gameServer = new GameServer(http);
 
-declare var exports: any;
-var serverInstance = new GameServer(8080);
+app.use(express.static('.'));
 
-exports.instance = serverInstance;
+http.listen(ServerSettings.PORT, ServerSettings.HOST, 50, () => {
+    console.log("created server, listening on", ServerSettings.HOST, ServerSettings.PORT);
+    gameServer.init();
+});

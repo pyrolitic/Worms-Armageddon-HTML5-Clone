@@ -5,18 +5,14 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
-///<reference path="../system/Physics.ts" />
+import { Graphics } from "../system/Graphics";
+import { Timer } from "../system/Timer";
+import { Utilies } from "../system/Utilies";
 
 
 //TODO Needs to be clean up, after I hacked it to be more generic
 // for just displaying messages, demo 2moro not enough time to clean it up. More features!!!
-class ToostMessage
+export class ToostMessage
 {
     finished;
     color;
@@ -26,7 +22,7 @@ class ToostMessage
     speed;
 
     timer: Timer;
-    onFinishFunc;
+    onFinishFunc: (() => void) | null = null;
 
 
     // pre-render box around countdown number
@@ -34,7 +30,7 @@ class ToostMessage
     {
         var healthBoxWidth = 39;
         var healthBoxHeight = 18
-        return Graphics.preRenderer.render((ctx) =>
+        return Graphics.preRenderer.render((ctx : CanvasRenderingContext2D) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -49,7 +45,7 @@ class ToostMessage
     preRenderMessageBox()
     {
         var nameBoxWidth = this.message.length * 10;
-        return Graphics.preRenderer.render((ctx) =>
+        return Graphics.preRenderer.render((ctx : CanvasRenderingContext2D) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -67,7 +63,7 @@ class ToostMessage
     }
 
 
-    constructor (pos, message, color, time = 2700, speed = 0.7)
+    constructor (pos : any, message : any, color : any, time = 2700, speed = 0.7)
     {
         this.finished = false;
         this.color = color;
@@ -91,7 +87,7 @@ class ToostMessage
         this.timer = new Timer(time);
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         ctx.drawImage(this.box, this.pos.x, this.pos.y);
         ctx.fillStyle = this.color;
@@ -102,7 +98,7 @@ class ToostMessage
         }
     }
 
-    onAnimationFinish(func)
+    onAnimationFinish(func : () => void)
     {
         this.onFinishFunc = func;
     }

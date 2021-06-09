@@ -1,17 +1,7 @@
-///<reference path="ServerSettings.ts"/>
 
-// HACK
-// Had to give up the benfits of types in this instance, as a problem with the way ES6 proposal module system
-// works with Node.js modules. http://stackoverflow.com/questions/13444064/typescript-conditional-module-import-export
-try
+export module ServerUtilies
 {
-    eval("var ServerSettings = require('./ServerSettings');var Util = require('util');");
-
-} catch (e) { }
-
-module ServerUtilies
-{
-    export function findByValue(needle, haystack, haystackProperity, )
+    export function findByValue(needle : any, haystack : any[], haystackProperity : any, )
     {
 
         for (var i = 0; i < haystack.length; i++)
@@ -24,7 +14,7 @@ module ServerUtilies
         throw "Couldn't find object with proerpty " + haystackProperity + " equal to " + needle;
     }
 
-    export function deleteFromCollection(collection, indexToRemove)
+    export function deleteFromCollection(collection : any[], indexToRemove : number)
     {
         delete collection[indexToRemove];
         collection.splice(indexToRemove, 1);
@@ -35,8 +25,7 @@ module ServerUtilies
         return Math.random().toString(36).substr(2);
     }
 
-
-    export function info(io,message)
+    /*export function info(io,message)
     {
         if (ServerSettings.DEVELOPMENT_MODE)
               io.log.info(Util.format("@ " + message));
@@ -58,12 +47,5 @@ module ServerUtilies
     {
         if (ServerSettings.DEVELOPMENT_MODE)
                 io.log.error(Util.format("@ " + message));
-    }
-}
-
-//Hack
-declare var exports: any;
-if (typeof exports != 'undefined')
-{
-    (module).exports = ServerUtilies;
+    }*/
 }

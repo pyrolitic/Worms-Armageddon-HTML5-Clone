@@ -4,29 +4,22 @@
  * once the effect it complete it will be removed from the collection
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="Particle.ts"/>
-///<reference path="ParticleEffect.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
+import { Utilies } from "../system/Utilies";
 
-class EffectsManager
+export class EffectsManager
 {
 
-    particleEffects;
+    particleEffects: any[];
 
     constructor ()
     {
         this.particleEffects = [];
     }
 
-    add(effect)
+    add(effect: any)
     {
         this.particleEffects.push(effect);
     }
@@ -39,7 +32,7 @@ class EffectsManager
         }
     }
 
-    draw(ctx)
+    draw(ctx: CanvasRenderingContext2D)
     {
         for (var i = this.particleEffects.length - 1; i >= 0; i--)
         {

@@ -4,19 +4,16 @@
  * The target or cross hairs the player rotates to aim
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Graphics.ts"/>
-///<reference path="system/Utilies.ts"/>
-///<reference path="system/AssetManager.ts"/>
-///<reference path="system/Physics.ts"/>
-///<reference path="Game.ts"/>
-///<reference path="Main.ts"/>
-///<reference path="animation/Sprite.ts"/>
-///<reference path="animation/PhysicsSprite.ts"/>
+import { PhysicsSprite } from "./animation/PhysicsSprite";
+import { Sprites } from "./animation/SpriteDefinitions";
+import { b2Vec2, Physics } from "./system/Physics";
+import { Utilies } from "./system/Utilies";
+import { Worm } from "./Worm";
 
-class Target extends PhysicsSprite
+export class Target extends PhysicsSprite
 {
     // Aiming
     private targetDirection;
@@ -26,7 +23,7 @@ class Target extends PhysicsSprite
 
     //When the player walks and the aims again
     //allows me to reset the sprites current frame to what it was at previously
-    previousSpriteFrame;
+    previousSpriteFrame : number = 0;
 
     constructor(worm: Worm)
     {
@@ -38,7 +35,7 @@ class Target extends PhysicsSprite
         this.direction = this.worm.direction;
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         if (this.worm.isActiveWorm() && this.worm.getWeapon().requiresAiming)
         {
@@ -65,12 +62,12 @@ class Target extends PhysicsSprite
         return this.targetDirection;
     }
 
-    setTargetDirection(vector)
+    setTargetDirection(vector : any)
     {
         this.targetDirection = vector;
     }
 
-    changeDirection(dir)
+    changeDirection(dir : any)
     {
         var td = this.targetDirection.Copy();
         var currentAngle = Utilies.toDegrees(Utilies.vectorToAngle(td));

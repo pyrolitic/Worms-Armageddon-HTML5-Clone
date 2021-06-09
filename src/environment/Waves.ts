@@ -2,12 +2,14 @@
  * JetPack.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../animation/Sprite.ts"/>
 
-class Waves
+import { Sprites } from '../animation/SpriteDefinitions';
+import {Sprite} from './../animation/Sprite'
+
+export class Waves
 {
     wave: Sprite;
     wave2: Sprite;
@@ -28,7 +30,7 @@ class Waves
     }
 
     //TODO pre-render waves
-    drawBackgroundWaves(ctx, x, y, w)
+    drawBackgroundWaves(ctx : CanvasRenderingContext2D, x : number, y : number, w : number)
     {
        y -= 35;
        ctx.fillRect(x,y,w,400);
@@ -41,7 +43,7 @@ class Waves
     }
 
     //TODO pre-render waves, do somthing to optimize them anyway.
-    draw(ctx,x,y,w)
+    draw(ctx : CanvasRenderingContext2D,x : number,y : number,w : number)
     {        
         var waveY = y - this.wave.getFrameHeight() * 0.5;
         for (var i = 0; i < w; i += this.wave.getFrameWidth())

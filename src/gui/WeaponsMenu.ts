@@ -8,13 +8,17 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Main.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Controls.ts"/>
-class WeaponsMenu
+import { GameInstance } from "../MainInstance";
+import { Events } from "../networking/Events";
+import { InstructionChain } from "../networking/InstructionChain";
+import {AssetManager} from "../system/AssetManager";
+import { Controls } from "../system/Controls";
+import { BaseWeapon } from "../weapons/BaseWeapon";
+import {Client} from "./../networking/Client";
+
+export class WeaponsMenu
 {
-    htmlElement;
+    htmlElement : JQuery<HTMLElement>;
     isVisable;
     cssId;
     toggleButtonCssId;
@@ -26,31 +30,30 @@ class WeaponsMenu
 
         $('body').append("<div id=" + this.cssId + "><div id=" + this.toggleButtonCssId + ">Weapons Menu</div><div id=content></div></div>");
 
-
         this.htmlElement = $("#" + this.cssId);
 
-
-         $('#'+this.toggleButtonCssId).click(() =>
-         {
-             if (Client.isClientsTurn())
-            {
-                this.toggle();
-            }
-         });
-
-        $(window).keypress((event) =>
+        $('#'+this.toggleButtonCssId).click(() =>
         {
-            if (Client.isClientsTurn() && Controls.checkControls(Controls.toggleWeaponMenu, event.which))
+            if (Client.isClientsTurn())
             {
                 this.toggle();
             }
         });
 
-        $('body').mousedown((event) =>
-        {
-            if (Client.isClientsTurn() && Controls.checkControls(Controls.toggleWeaponMenu, event.which))
+        window.addEventListener("keypress", (event : KeyboardEvent) => {
+            if (Client.isClientsTurn() && Controls.toggleWeaponMenu.keyboard == event.code)
             {
                 this.toggle();
+            }
+        });
+
+        $('body').on({
+            mousedown: (event : MouseEvent) =>
+            {
+                if (Client.isClientsTurn() && Controls.toggleWeaponMenu.mouse == event.button)
+                {
+                    this.toggle();
+                }
             }
         });
 
@@ -63,7 +66,7 @@ class WeaponsMenu
     }
 
 
-    selectWeapon(weaponId)
+    selectWeapon(weaponId : number)
     {
         var weaponMgmt = GameInstance.state.getCurrentPlayer().getTeam().getWeaponManager();
 
@@ -137,8 +140,8 @@ class WeaponsMenu
         $($(this.htmlElement).children().get(1)).empty();
         $($(this.htmlElement).children().get(1)).append(html);
 
-
-        $("#" + this.cssId + " li").click(() =>
+        var _this = this;
+        $("#" + this.cssId).find("li").click(function()
         {
             var weaponId = parseInt($(this).attr('id'));
 
@@ -149,8 +152,8 @@ class WeaponsMenu
             }
 
             AssetManager.getSound("CursorSelect").play();
-            this.selectWeapon(weaponId);
-            this.toggle();
+            _this.selectWeapon(weaponId);
+            _this.toggle();
         });
 
     }

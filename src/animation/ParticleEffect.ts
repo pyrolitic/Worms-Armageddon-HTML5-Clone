@@ -3,19 +3,17 @@
  * Manages all the different sprites that make up the explosion effect
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="Particle.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
+import { b2Vec2 } from "../system/Physics";
+import { Utilies } from "../system/Utilies";
+import { Particle } from "./Particle";
+import { Sprite } from "./Sprite";
+import { Sprites } from "./SpriteDefinitions";
 
 
-class ParticleEffect
+export class ParticleEffect
 {
     private x: number;
     private y: number;
@@ -26,10 +24,10 @@ class ParticleEffect
     particles: Particle[];
     center;
     finished;
-    onFinished;
+    onFinished: (() => void) | null = null;
 
 
-    constructor (x, y)
+    constructor (x : number, y : number)
     {
         this.x = x;
         this.y = y;
@@ -54,7 +52,7 @@ class ParticleEffect
 
 
 
-    draw(ctx)
+    draw(ctx: CanvasRenderingContext2D)
     {
         
         ctx.save();
@@ -115,7 +113,7 @@ class ParticleEffect
          }
     }
 
-    onAnimationFinish(func)
+    onAnimationFinish(func : ()=>void)
     {
         this.onFinished = func;
     }

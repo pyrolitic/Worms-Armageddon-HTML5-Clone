@@ -1,55 +1,59 @@
-declare var require;
-declare var module;
 
-var mongo = require('mongodb');
+import {Db, MongoClient} from 'mongodb';
+
+/*var mongo = require('mongodb');
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
-var curl = require('node-curl');
+var curl = require('node-curl');*/
 
-class LeaderBoardApi
+export interface Settings {
+    port: number;
+    database: string;
+    userTable: string;
+    apiKey: string;
+}
+
+export class LeaderBoardApi
 {
-    settings;
-    db: any;
+    settings : Settings;
+    db: Db | null = null;
 
-    constructor(settings)
+    constructor(settings : Settings)
     {
         this.settings = settings;
 
         //Setup server and connect to the database
-        var server = new Server('localhost', 27017, { auto_reconnect: true });
-        this.db = new Db(this.settings.database, server, { safe: false });
-        this.db.open((err, db) => {
-            if (!err)
-            {
-                console.log("Connected to " + this.settings.database + " database");
-            } else
-            {
+        MongoClient.connect('localhost:27017', (err, client) => {
+            this.db = client.db(this.settings.database);
+            if(err) {
                 console.log("ERROR connecting to " + this.settings.database + " database");
+            } else {
+                console.log("Connected to " + this.settings.database + " database");
             }
         });
     }
 
-    remove(req,res)
+    remove(req : any, res : any)
     {
         var authToken = req.params.token;
-        this.findUsersIdByToken(authToken, (userId) => {
-            this.db.collection(this.settings.userTable, (err, collection) => {
+        this.findUsersIdByToken(authToken, (userId : string) => {
+            (this.db as Db).collection(this.settings.userTable, (err, collection) => {
                 collection.remove({"userId": userId });
             });
         });
     }
 
-    updateUser(req, res)
+    updateUser(req : any, res : any)
     {
         var authToken = req.params.token;
 
-        this.findUsersIdByToken(authToken, (userId) => {
+        this.findUsersIdByToken(authToken, (userId : string) => {
 
             //if got userId from authToken
             if (userId)
             {
-                this.db.collection(this.settings.userTable, (err, collection) => {
+                (this.db as Db).collection(this.settings.userTable, (err, collection) => {
 
                     collection.findOne({ 'userId': userId }, (err, item) => {
 
@@ -77,10 +81,10 @@ class LeaderBoardApi
 
     }
 
-    getLeaderBoard(req, res)
+    getLeaderBoard(req : any, res : any)
     {
         console.log(res);
-        this.db.collection(this.settings.userTable, (err, collection) => {
+        (this.db as Db).collection(this.settings.userTable, (err, collection) => {
             collection.find().sort({ "winCount": -1 }).toArray(function (err, items)
             {
                 console.log(items);
@@ -90,9 +94,11 @@ class LeaderBoardApi
     }
 
     //Given a authToken, it will retrive the userId of the authenetiated user
-    findUsersIdByToken(authToken, callback)
+    findUsersIdByToken(authToken : string, callback : CallableFunction)
     {
-        var url = 'https://www.googleapis.com/plus/v1/people/me?key=' + this.settings.apiKey + '&access_token=' + authToken;
+        callback(authToken);
+
+        /*var url = 'https://www.googleapis.com/plus/v1/people/me?key=' + this.settings.apiKey + '&access_token=' + authToken;
         //console.log(url);
         curl(url, function (err)
         {
@@ -100,13 +106,7 @@ class LeaderBoardApi
             //console.log(this.body);
             var userId = JSON.parse(this.body).id;
             callback(userId);
-        });
+        });*/
     }
 
-}
-
-declare var exports: any;
-if (typeof exports != 'undefined')
-{
-    (module ).exports = LeaderBoardApi;
 }

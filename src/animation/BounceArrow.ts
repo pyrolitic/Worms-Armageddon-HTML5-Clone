@@ -5,20 +5,14 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="PhysicsSprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
-///<reference path="../system/Physics.ts" />
+import { Sprite } from "./Sprite";
+import { Sprites } from "./SpriteDefinitions";
 
-class BounceArrow extends Sprite
+export class BounceArrow extends Sprite
 {
     initalPos;
 
-    constructor (initalPos)
+    constructor (initalPos : any)
     {
         super(Sprites.weapons.arrow);
 
@@ -27,7 +21,7 @@ class BounceArrow extends Sprite
         this.initalPos = initalPos;
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         if (this.finished == false)
         {

@@ -5,18 +5,24 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../animation/Sprite.ts"/>
+import { Sprite } from "../animation/Sprite";
+import { Sprites } from "../animation/SpriteDefinitions";
+import { AssetManager } from "../system/AssetManager";
+import { Graphics } from "../system/Graphics";
+import { Physics } from "../system/Physics";
+import { Utilies } from "../system/Utilies";
+import { Worm } from "../Worm";
 
-class ForceIndicator
+export class ForceIndicator
 {
-    private forcePercentage;
-    private forceRateIncrease;
-    private forceMax;
+    private forcePercentage: number;
+    //private forceRateIncrease : number;
+    private forceMax : number;
     private  sprite: Sprite;
     private  needReRender: boolean;
-    private  renderCanvas;
+    private  renderCanvas : HTMLCanvasElement | null;
 
-    constructor(maxForceForWeapon)
+    constructor(maxForceForWeapon : number)
     {
         this.forceMax = maxForceForWeapon; // Max force at which worms can throw
         this.forcePercentage = 1;
@@ -32,14 +38,14 @@ class ForceIndicator
     }
 
 
-    draw(ctx, worm: Worm)
+    draw(ctx : CanvasRenderingContext2D, worm: Worm)
     {
         if (this.isCharging() && this.isRequired())
         {
 
             if (this.needReRender)
             {
-                this.renderCanvas = Graphics.preRenderer.render((context) =>
+                this.renderCanvas = Graphics.preRenderer.render((context : CanvasRenderingContext2D) =>
                 {
                     // if(this.renderCanvas == null)
                      //context.fillRect(0, 0, 400, 400);
@@ -69,12 +75,13 @@ class ForceIndicator
             //TODO No is cause of the canvas corrdinate system, oh yea.
             ctx.rotate(Utilies.vectorToAngle(worm.target.getTargetDirection().Copy()) + Utilies.toRadians(-90));
 
-            ctx.drawImage(this.renderCanvas, -radius,  -radius, this.renderCanvas.width, this.renderCanvas.height);
+            var canvas = this.renderCanvas as HTMLCanvasElement;
+            ctx.drawImage(canvas, -radius,  -radius, canvas.width, canvas.height);
             ctx.restore();
         }
     }
 
-    charge(rate)
+    charge(rate : number)
     {
         if (this.isRequired())
         {
@@ -96,7 +103,7 @@ class ForceIndicator
         return this.forcePercentage > 1;
     }
 
-    setMaxForce(forceScalerMax)
+    setMaxForce(forceScalerMax : number)
     {
         this.forceMax = forceScalerMax;
     }
@@ -108,7 +115,11 @@ class ForceIndicator
             this.forcePercentage = 1;
             AssetManager.getSound("THROWPOWERUP").pause();
             AssetManager.getSound("THROWRELEASE").play();
-            this.renderCanvas.getContext('2d').clearRect(0, 0, this.renderCanvas.width, this.renderCanvas.height);
+            var canvas = this.renderCanvas;
+            if(canvas != null) { //TODO
+                var ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
 
             //Used to reset the sprite
             this.sprite.currentFrameY = 0;

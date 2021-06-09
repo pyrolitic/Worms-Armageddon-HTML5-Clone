@@ -2,18 +2,12 @@
 // * Blowtorch.js
 // *
 // *  License: Apache 2.0
-// *  author:  Ciarán McCann
+// *  author:  Ciarï¿½n McCann
 // *  url: http://www.ciaranmccann.me/
 // */
-/////<reference path="../system/Physics.ts"/>
-/////<reference path="../system/Utilies.ts" />
-/////<reference path="../Worm.ts" />
-/////<reference path="../animation/Sprite.ts"/>
-/////<reference path="../system/Timer.ts"/>
-/////<reference path="../Game.ts"/>
-/////<reference path="BaseWeapon.ts"/>
-/////<reference path="Drill.ts"/>
 
+//import { BaseWeapon } from "./BaseWeapon";
+//
 //class Blowtorch extends Drill
 //{
 //    constructor(ammo)

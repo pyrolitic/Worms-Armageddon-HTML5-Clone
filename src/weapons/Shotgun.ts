@@ -5,24 +5,23 @@
  *  author:  Ciaran McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../environment/Terrain.ts"/>
-///<reference path="BaseWeapon.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="../animation/Sprite.ts"/>
-///<reference path="../animation/Effects.ts"/>
 
-class Shotgun extends RayWeapon
+import { Effects } from "../animation/Effects";
+import { SpriteDefinition, Sprites } from "../animation/SpriteDefinitions";
+import { GameInstance } from "../MainInstance";
+import { AssetManager } from "../system/AssetManager";
+import { Physics } from "../system/Physics";
+import { Timer } from "../system/Timer";
+import { Worm } from "../Worm";
+import { RayWeapon } from "./RayWeapon";
+export class Shotgun extends RayWeapon
 {
     fireAnimations: SpriteDefinition[];
     fireAnimationIndex: number;
     animationSheetChangeTimer: Timer;
     shotsTaken;
 
-    constructor(ammo)
+    constructor(ammo : number)
     {
         super(
             "Shotgun",
@@ -73,14 +72,14 @@ class Shotgun extends RayWeapon
 
             if (this.animationSheetChangeTimer.hasTimePeriodPassed())
             {
-                this.worm.swapSpriteSheet(this.fireAnimations[this.fireAnimationIndex]);
+                (this.worm as Worm).swapSpriteSheet(this.fireAnimations[this.fireAnimationIndex]);
                 this.fireAnimationIndex++;
             }
 
 
             if (this.fireAnimationIndex >= this.fireAnimations.length)
             {
-                var hitPiont = Physics.shotRay(this.worm.body.GetPosition(), this.worm.target.getTargetDirection().Copy());
+                var hitPiont = Physics.shotRay((this.worm as Worm).body.GetPosition(), (this.worm as Worm).target.getTargetDirection().Copy());
                 if (hitPiont)
                 {
                     Effects.explosion(hitPiont,
@@ -100,7 +99,7 @@ class Shotgun extends RayWeapon
 
                 setTimeout(() => {
                     this.setIsActive(false);
-                    this.worm.swapSpriteSheet(this.fireAnimations[this.fireAnimationIndex]);
+                    (this.worm as Worm).swapSpriteSheet(this.fireAnimations[this.fireAnimationIndex]);
 
                     if (this.shotsTaken >= 2)
                     {
@@ -114,5 +113,7 @@ class Shotgun extends RayWeapon
             }
 
         }
+
+        return false;
     }
 }

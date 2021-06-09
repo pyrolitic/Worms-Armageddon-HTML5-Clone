@@ -8,23 +8,28 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Graphics.ts"/>
-///<reference path="system/AssetManager.ts"/>
-///<reference path="system/Physics.ts"/>
-///<reference path="animation/Sprite.ts"/>
-///<reference path="animation/HealthReduction.ts"/>
-///<reference path="weapons/Drill.ts"/>
-///<reference path="Team.ts"/>
-///<reference path="system/Utilies.ts" />
-///<reference path="system/NameGenerator.ts" />
-///<reference path="environment/Terrain.ts" />
-///<reference path="Main.ts" />
-///<reference path="WormAnimationManger.ts" />
-///<reference path="Target.ts" />
 
-class Worm extends Sprite
+import { BounceArrow } from "./animation/BounceArrow";
+import { Sprite } from "./animation/Sprite";
+import { Sprites } from "./animation/SpriteDefinitions";
+import { Terrain } from "./environment/Terrain";
+import { GameInstance } from "./MainInstance";
+import { Client } from "./networking/Client";
+import { AssetManager } from "./system/AssetManager";
+import { Graphics } from "./system/Graphics";
+import { NameGenerator } from "./system/NameGenerator";
+import { Physics, b2FixtureDef, b2CircleShape, b2Vec2, b2BodyDef, b2Body, b2PolygonShape } from "./system/Physics";
+import { Timer } from "./system/Timer";
+import { Logger, Utilies } from "./system/Utilies";
+import { Target } from "./Target";
+import { Team } from "./Team";
+import { BaseWeapon } from "./weapons/BaseWeapon";
+import { JetPack } from "./weapons/JetPack";
+import { NinjaRope } from "./weapons/NinjaRope";
+import { WormAnimationManger } from "./WormAnimationManger";
+
+export class Worm extends Sprite
 {
-
     static DENSITY = 10.0;
     static DIRECTION = {
         left: -1,
@@ -33,20 +38,20 @@ class Worm extends Sprite
 
     body;
     fixture;
-    direction;
-    speed;
+    direction: number;
+    speed: number;
     canJump: number;
-    name;
+    name: string;
 
     damageTake;
-    health;
+    health : number;
 
     //Pre-render shapes for text
-    nameBox;
-    healthBox;
+    nameBox : any;
+    healthBox : any;
 
     //Bouncying arrow when selected
-    arrow: BounceArrow;
+    arrow: BounceArrow | null = null;
 
     team: Team;
     footSensor;
@@ -60,7 +65,7 @@ class Worm extends Sprite
     //force: number;
     fallHeight: number;
 
-    constructor(team, x, y)
+    constructor(team : any, x : number, y : number)
     {
         super(Sprites.worms.idle1);
         this.name = NameGenerator.randomName();
@@ -118,7 +123,7 @@ class Worm extends Sprite
         return { "x": this.body.GetPosition().x, "y": this.body.GetPosition().y, "arrow": this.arrow };
     }
 
-    setWormNetData(packetStream)
+    setWormNetData(packetStream : any)
     {
         Logger.log(" old pos " + this.body.m_xf.position.x + " new pos " + packetStream.x);
 
@@ -131,7 +136,7 @@ class Worm extends Sprite
         var nameBoxWidth = this.name.length * 10;
         var healthBoxWidth = 39;
         var healthBoxHeight = 18
-        this.nameBox = Graphics.preRenderer.render((ctx) =>
+        this.nameBox = Graphics.preRenderer.render((ctx : CanvasRenderingContext2D) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -147,7 +152,7 @@ class Worm extends Sprite
 
         }, nameBoxWidth, 20);
 
-        this.healthBox = Graphics.preRenderer.render((ctx) =>
+        this.healthBox = Graphics.preRenderer.render((ctx : CanvasRenderingContext2D) =>
         {
 
             ctx.fillStyle = '#1A1110';
@@ -159,7 +164,7 @@ class Worm extends Sprite
             Graphics.roundRect(ctx, 0, 0, healthBoxWidth, healthBoxHeight, 4).stroke();
 
             ctx.fillStyle = this.team.color;
-            ctx.fillText(Math.floor(this.health), healthBoxWidth / 2, healthBoxHeight - 3);
+            ctx.fillText(Math.floor(this.health).toString(), healthBoxWidth / 2, healthBoxHeight - 3);
 
         }, 39, 20);
 
@@ -190,7 +195,7 @@ class Worm extends Sprite
 
 
     // What happens when a worm collies with another object
-    beginContact(contact)
+    beginContact(contact : any)
     {
         if (Physics.isCollisionBetweenTypes(Terrain, Worm, contact))
         {
@@ -210,7 +215,7 @@ class Worm extends Sprite
     }
 
     //What happens when a worm is no longer in contact with the object it was in contact with
-    endContact(contact)
+    endContact(contact : any)
     {
         if (Physics.isCollisionBetweenTypes(Terrain, Worm, contact))
         {
@@ -221,7 +226,7 @@ class Worm extends Sprite
         }
     }
 
-    postSolve(contact, impulse)
+    postSolve(contact : any, impulse : any)
     {
         if (contact.GetFixtureA() instanceof BaseWeapon == false && contact.GetFixtureB() instanceof BaseWeapon == false)
         {
@@ -238,7 +243,7 @@ class Worm extends Sprite
                 if (impulse.normalImpulses[0] > impactTheroshold)
                 {
                     var damage = Math.round(impulse.normalImpulses[0]) / Worm.DENSITY;
-                    Logger.log(damage);
+                    Logger.log(damage.toString());
 
                     if (damage > 10)
                     {
@@ -410,7 +415,7 @@ class Worm extends Sprite
         }
     }
 
-    hit(damage, worm = null, overrideClientOnlyUse = false)
+    hit(damage : number, worm : Worm|null = null, overrideClientOnlyUse = false)
     {
         //For Networked games.
 
@@ -514,7 +519,7 @@ class Worm extends Sprite
 
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         this.team.getWeaponManager().getCurrentWeapon().draw(ctx);
 
@@ -568,7 +573,7 @@ class Worm extends Sprite
 
 }
 
-class WormDataPacket
+export class WormDataPacket
 {
     name;
     position;

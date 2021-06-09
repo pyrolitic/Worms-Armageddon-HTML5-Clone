@@ -11,12 +11,15 @@
 ///<reference path="../Game.ts"/>
 ///<reference path="Utilies.ts" />
 
+import { Settings } from "../Settings";
+import { Utilies } from "./Utilies";
+
 // Throws to many errors to use
 //<reference path="../../external/box2dweb-2.1.d.ts" />
 
-declare var Box2D;
+declare var Box2D : any;
 //Global defining of shortened names for box2d types
-var b2Vec2 = Box2D.Common.Math.b2Vec2,
+export var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2BodyDef = Box2D.Dynamics.b2BodyDef,
     b2Body = Box2D.Dynamics.b2Body,
     b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
@@ -39,21 +42,21 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
 
 
 
-module Physics
+export module Physics
 {
 
-    export var worldScale;
-    export var world;
-    export var debugDraw;
+    export var worldScale : number;
+    export var world : any;
+    export var debugDraw : any;
 
     // For fast acess to all bodies that aren't the terrain
-    export var fastAcessList = [];
-    export function addToFastAcessList(body)
+    export var fastAcessList : any[] = [];
+    export function addToFastAcessList(body : any)
     {
         fastAcessList.push(body);
     }
 
-    export function removeToFastAcessList(body)
+    export function removeToFastAcessList(body : any)
     {
         for (var b in fastAcessList)
         {
@@ -65,7 +68,7 @@ module Physics
     }
 
 
-    export function init(ctx)
+    export function init(ctx : CanvasRenderingContext2D)
     {
 
         Physics.worldScale = 30;
@@ -92,7 +95,7 @@ module Physics
         // I have set the this pionter as the user data, which allows me to then call methods
         // on that class as we can see below.
         var listener = new b2ContactListener();
-        listener.BeginContact = (contact) =>
+        listener.BeginContact = (contact : any) =>
         {
             if (contact.GetFixtureA().GetBody().GetUserData() != null &&
                 contact.GetFixtureA().GetBody().GetUserData().beginContact != null)
@@ -108,7 +111,7 @@ module Physics
         }
 
 
-        listener.EndContact = (contact) =>
+        listener.EndContact = (contact : any) =>
         {
             if (contact.GetFixtureA().GetBody().GetUserData() != null &&
                 contact.GetFixtureA().GetBody().GetUserData().endContact != null)
@@ -123,7 +126,7 @@ module Physics
             }
         }
 
-        listener.PostSolve = (contact,impulse) =>
+        listener.PostSolve = (contact : any, impulse : any) =>
         {
             if (contact.GetFixtureA().GetBody().GetUserData() != null &&
                 contact.GetFixtureA().GetBody().GetUserData().postSolve != null)
@@ -139,7 +142,7 @@ module Physics
 
         }
 
-        listener.PreSolve = (contact) =>
+        listener.PreSolve = (contact : any) =>
         {
             if (contact.GetFixtureA().GetBody().GetUserData() != null &&
                 contact.GetFixtureA().GetBody().GetUserData().preSolve != null)
@@ -159,7 +162,7 @@ module Physics
     }
 
     //Checks if the collison is between an obj of type1 and an obj of type2
-    export function isCollisionBetweenTypes(objType1, objType2, contact)
+    export function isCollisionBetweenTypes(objType1 : any, objType2 : any, contact : any)
     {
         var obj1 = contact.GetFixtureA().GetBody().GetUserData();
         var obj2 = contact.GetFixtureB().GetBody().GetUserData();
@@ -177,7 +180,7 @@ module Physics
         }
     }
 
-    export function shotRay(startPiontInMeters, endPiontInMeters)
+    export function shotRay(startPiontInMeters : any, endPiontInMeters : any)
     {
         var input = new b2RayCastInput();
         var output = new b2RayCastOutput();
@@ -228,13 +231,13 @@ module Physics
         return null;
     }
 
-    export function applyToNearByObjects(epicenter, effectedRadius, funcToApplyToEach)
+    export function applyToNearByObjects(epicenter : any, effectedRadius : any, funcToApplyToEach : any)
     {
         var aabb = new b2AABB();
         aabb.lowerBound.Set(epicenter.x - effectedRadius, epicenter.y - effectedRadius);
         aabb.upperBound.Set(epicenter.x + effectedRadius, epicenter.y + effectedRadius);
 
-        Physics.world.QueryAABB((fixture) =>
+        Physics.world.QueryAABB((fixture : any) =>
         {
             funcToApplyToEach(fixture, epicenter);
             return true;
@@ -255,18 +258,18 @@ module Physics
     }
 
     //Converts a vector in pixels to physic world measurement
-    export function vectorPixelToMeters(vPixels)
+    export function vectorPixelToMeters(vPixels : any)
     {
         return new b2Vec2(vPixels.x / worldScale, vPixels.y / worldScale);
     }
 
     //Converts a vector in physic world measurement to pixels;
-    export function vectorMetersToPixels(vMeters)
+    export function vectorMetersToPixels(vMeters : any)
     {
         return new b2Vec2(vMeters.x * worldScale, vMeters.y * worldScale);
     }
 
-    export function bodyToDrawingPixelCoordinates(body)
+    export function bodyToDrawingPixelCoordinates(body : any)
     {
         var pos = body.GetPosition();
         var radius = body.GetFixtureList().GetShape().GetRadius();
@@ -286,7 +289,7 @@ class BodyDataPacket
     pX;
     pY;
 
-    constructor(body)
+    constructor(body : any)
     {
         if (typeof body == "string")
         {
@@ -298,7 +301,7 @@ class BodyDataPacket
         }
     }
 
-    override(body)
+    override(body : any)
     {
 
         if (body)
@@ -333,12 +336,12 @@ class BodyDataPacket
 }
 
 
-class PhysiscsDataPacket
+export class PhysiscsDataPacket
 {
     bodyDataPackets: BodyDataPacket[];
 
 
-    constructor(bodies)
+    constructor(bodies : any)
     {
         this.bodyDataPackets = [];
 
@@ -354,7 +357,7 @@ class PhysiscsDataPacket
         }
     }
 
-    override(bodies)
+    override(bodies : any)
     {
         for (var b in this.bodyDataPackets)
         {

@@ -3,14 +3,19 @@
  * Leaderboards.js is a RESETful api for the leaderboards information
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="../../Game.ts"/>
 ///<reference path="../../system/Utilies.ts"/>
 
+import { LobbyMenu } from "../../gui/LobbyMenu";
+import { Settings } from "../../Settings";
+import { Notify } from "../../system/Utilies";
+import { Client } from "../Client";
+import { Events } from "../Events";
 
-var access_token;
+export var access_token : string;
 
 function googlePlusSignIn(authResult)
 {
@@ -42,7 +47,7 @@ function googlePlusSignIn(authResult)
 }
 
 
-function googlePlusdisconnectUser(access_token)
+function googlePlusdisconnectUser(access_token : string)
 {
     var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' +
         access_token;

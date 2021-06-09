@@ -3,22 +3,19 @@
  * Flames and shit... 
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Sprite.ts"/>
-///<reference path="PhysicsSprite.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Utilies.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../Settings.ts" />
-///<reference path="../system/Physics.ts" />
+import { GameInstance } from "../MainInstance";
+import { b2Vec2 } from "../system/Physics";
+import { Utilies } from "../system/Utilies";
+import { PhysicsSprite } from "./PhysicsSprite";
+import { Sprites } from "./SpriteDefinitions";
 
-class Particle extends PhysicsSprite
+export class Particle extends PhysicsSprite
 {
    
-    constructor (initalPos, initalVelocity, spriteDef = Sprites.particleEffects.flame1)
+    constructor (initalPos : any, initalVelocity : any, spriteDef = Sprites.particleEffects.flame1)
     {
         super(initalPos, initalVelocity, spriteDef);
         this.setNoLoop(true);
@@ -27,7 +24,7 @@ class Particle extends PhysicsSprite
 }
 
 
-class Cloud extends PhysicsSprite
+export class Cloud extends PhysicsSprite
 {
    
     constructor ()

@@ -6,73 +6,76 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Camera.ts"/>
-///<reference path="system/Graphics.ts"/>
-///<reference path="system/AssetManager.ts"/>
-///<reference path="system/Physics.ts"/>
-///<reference path="environment/Terrain.ts"/>
-///<reference path="Worm.ts"/>
-///<reference path="system/Utilies.ts"/>
-///<reference path="gui/WeaponsMenu.ts" />
-///<reference path="Player.ts" />
-///<reference path="system/Timer.ts" />
-///<reference path="Settings.ts" />
-///<reference path="gui/CountDownTimer.ts" />
-///<reference path="animation/SpriteDefinitions.ts" />
-///<reference path="animation/ParticleEffect.ts"/>
-///<reference path="animation/EffectsManager.ts"/>
-///<reference path="gui/HealthMenu.ts"/>
-///<reference path="environment/Maps.ts"/>
-///<reference path="GameStateManager.ts"/>
-///<reference path="WormManager.ts"/>
-///<reference path="networking/Client.ts"/>
-///<reference path="networking/Lobby.ts"/>
-///<reference path="Tutorial.ts"/>
-
-class Game
+import { EffectsManager } from "./animation/EffectsManager";
+import { Cloud } from "./animation/Particle";
+import { ParticleEffect } from "./animation/ParticleEffect";
+import {Map, Maps} from "./environment/Maps";
+import {Terrain} from "./environment/Terrain";
+import { GameStateManager } from "./GameStateManager";
+import { CountDownTimer } from "./gui/CountDownTimer";
+import { HealthMenu } from "./gui/HealthMenu";
+import { StartMenu } from "./gui/StartMenu";
+import {WeaponsMenu} from "./gui/WeaponsMenu";
+import { GameInstance } from "./MainInstance";
+import { Client } from "./networking/Client";
+import { Events } from "./networking/Events";
+import { access_token } from "./networking/LeaderBoard/GooglePLus";
+import { ClientLobby } from "./networking/ClientLobby";
+import {Player, PlayerDataPacket} from "./Player";
+import { Settings } from "./Settings";
+import { AssetManager } from "./system/AssetManager";
+import { Camera } from "./system/Camera";
+import { TwinStickControls } from "./system/GamePad";
+import { Graphics } from "./system/Graphics";
+import { b2Vec2, Physics, PhysiscsDataPacket } from "./system/Physics";
+import { keyboard, Logger, Notify, TouchUI, Utilies } from "./system/Utilies";
+import { Tutorial } from "./Tutorial";
+import { WormManager } from "./WormManager";
+import { InstructionChain } from "./networking/InstructionChain";
+export class Game
 {
     static types = {
         ONLINE_GAME: 0,
         LOCAL_GAME: 1
     };
 
-    actionCanvas;
-    actionCanvasContext;
+    actionCanvas : HTMLCanvasElement;
+    actionCanvasContext : CanvasRenderingContext2D;
 
-    terrain: Terrain;
+    terrain: Terrain | null = null;
     players: Player[];
 
     gameType: number;
 
-    weaponMenu: WeaponsMenu;
-    healthMenu: HealthMenu;
-    gameTimer: CountDownTimer;
+    weaponMenu: WeaponsMenu | null = null;
+    healthMenu: HealthMenu | null = null;
+    gameTimer: CountDownTimer | null = null;
 
-    wormManager: WormManager;
+    wormManager: WormManager | null = null;
     state: GameStateManager;
 
-    particleEffectMgmt: EffectsManager;
+    particleEffectMgmt: EffectsManager | null = null;
 
     //Manages arrows and generate indicators
-    miscellaneousEffects: EffectsManager;
+    miscellaneousEffects: EffectsManager | null = null;
 
     //Manages things like the clouds
-    enviormentEffects: EffectsManager;
+    enviormentEffects: EffectsManager | null = null;
 
-    lobby: Lobby;
+    lobby: ClientLobby;
 
-    winner: Player;
+    winner: Player | null = null;
 
-    static map: Map = new Map(Maps.castle);
+    static map: Map = new Map(Maps['castle']);
 
-    camera: Camera;
+    camera: Camera | null = null;
 
     //Using in dev mode to collect spawn positions
-    spawns;
+    spawns : any[];
 
-    tutorial: Tutorial;
+    tutorial: Tutorial | null = null;
 
-    sticks;
+    sticks : TwinStickControls | null = null;
 
 
     constructor()
@@ -82,7 +85,7 @@ class Game
 
         //Create action canvas
         this.actionCanvas = Graphics.createCanvas("action");
-        this.actionCanvasContext = this.actionCanvas.getContext("2d");
+        this.actionCanvasContext = this.actionCanvas.getContext("2d") as CanvasRenderingContext2D;
 
         this.sticks = new TwinStickControls(this.actionCanvas);
 
@@ -126,7 +129,7 @@ class Game
             }, false);
         }
 
-        this.lobby = new Lobby();
+        this.lobby = new ClientLobby();
     }
 
     getGameNetData()
@@ -134,7 +137,7 @@ class Game
         return new GameDataPacket(this);
     }
 
-    setGameNetData(data)
+    setGameNetData(data : GameDataPacket)
     {
         var gameDataPacket: GameDataPacket = Utilies.copy(new GameDataPacket(this), data);
         gameDataPacket.override(this);
@@ -143,8 +146,8 @@ class Game
     setupCanvas()
     {
         //Set canvas font stuff
-        this.actionCanvas.width = $(window).width();
-        this.actionCanvas.height = $(window).height();
+        this.actionCanvas.width = $(window).width() as number;
+        this.actionCanvas.height = $(window).height() as number;
         this.actionCanvasContext.font = 'bold 16px Sans-Serif';
         this.actionCanvasContext.textAlign = 'center';
         this.actionCanvasContext.fillStyle = "#384084"; // Water
@@ -176,7 +179,7 @@ class Game
         //}
     }
 
-    start(playerIds = null)
+    start(playerIds : number[] | null = null)
     {
         this.terrain = new Terrain(this.actionCanvas, Game.map.getTerrainImg(), Physics.world, Physics.worldScale);
         this.camera = new Camera(this.terrain.getWidth(), this.terrain.getHeight(), this.actionCanvas.width, this.actionCanvas.height);
@@ -236,11 +239,13 @@ class Game
         }
 
         //Diable certain keys
-        $(document).keydown(function (e)
-        {
-            if (e.keyCode == keyboard.keyCodes.Backspace)
+        $(document).on({
+            keydown :function (e : KeyboardEvent)
             {
-                e.preventDefault();
+                if (e.code == "Backspace")
+                {
+                    e.preventDefault();
+                }
             }
         });
 

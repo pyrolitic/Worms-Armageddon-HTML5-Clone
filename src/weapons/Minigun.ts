@@ -5,21 +5,20 @@
  *  author:  Ciaran McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../environment/Terrain.ts"/>
-///<reference path="BaseWeapon.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="../animation/Sprite.ts"/>
-///<reference path="../animation/Effects.ts"/>
+import { Effects } from "../animation/Effects";
+import { Sprites } from "../animation/SpriteDefinitions";
+import { GameInstance } from "../MainInstance";
+import { AssetManager } from "../system/AssetManager";
+import { Physics } from "../system/Physics";
+import { Timer } from "../system/Timer";
+import { Worm } from "../Worm";
+import { RayWeapon } from "./RayWeapon";
 
-class Minigun extends RayWeapon
+export class Minigun extends RayWeapon
 {
     fireRate: Timer;
 
-    constructor(ammo)
+    constructor(ammo : number)
     {
         super(
             "Minigun",
@@ -45,7 +44,7 @@ class Minigun extends RayWeapon
     activate(worm: Worm)
     {
         super.activate(worm);
-        this.worm.swapSpriteSheet(Sprites.worms.minigunFire);
+        (this.worm as Worm).swapSpriteSheet(Sprites.worms.minigunFire);
 
         //Setup a timer, to stop the weapon firing after so many secounds
         setTimeout(() => {
@@ -54,7 +53,7 @@ class Minigun extends RayWeapon
                 this.setIsActive(false);
                 GameInstance.state.tiggerNextTurn();
 
-                this.worm.swapSpriteSheet(this.takeAimAnimations);
+                (this.worm as Worm).swapSpriteSheet(this.takeAimAnimations);
         }, 1000);
         AssetManager.getSound("MiniGunFire").play();
     }
@@ -69,7 +68,7 @@ class Minigun extends RayWeapon
             if (this.fireRate.hasTimePeriodPassed())
             {
 
-                var hitPiont = Physics.shotRay(this.worm.body.GetPosition(), this.worm.target.getTargetDirection().Copy());
+                var hitPiont = Physics.shotRay((this.worm as Worm).body.GetPosition(), (this.worm as Worm).target.getTargetDirection().Copy());
                 if (hitPiont)
                 {
                     Effects.explosion(hitPiont,
@@ -78,12 +77,13 @@ class Minigun extends RayWeapon
                          this.forceScaler,
                         this.damgeToWorm,
                         this.worm,
-                       null);
+                       undefined);
                 }
             }
 
 
         }
+        return false;
 
     }
 

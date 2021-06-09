@@ -6,12 +6,13 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Game.ts"/>
-///<reference path="../networking/Lobby.ts"/>
-///<reference path="../networking/LeaderBoard/GooglePLus.ts"/>
-///<reference path="LeaderBoardView.ts"/>
-
-class LobbyMenu
+import { Client } from "../networking/Client";
+import { ClientLobby, ClientGameLobby } from "../networking/ClientLobby";
+import { BaseGameLobby } from "../networking/Lobby";
+import { AssetManager } from "../system/AssetManager";
+import { LeaderBoardView } from "./LeaderBoardView";
+import { SettingsMenu } from "./SettingsMenu";
+export class LobbyMenu
 {
     private view: string;
     static CSS_ID = {
@@ -27,10 +28,10 @@ class LobbyMenu
         USER_COUNT_BOX: "#userCount",
         LEADERBOARDS_TABLE: "#leaderBoards"
     }
-    private lobbyRef: Lobby;
+    private lobbyRef: ClientLobby;
     private leaderBoardView: LeaderBoardView;
 
-    constructor(lobby: Lobby)
+    constructor(lobby: ClientLobby)
     {
         this.lobbyRef = lobby;
         this.leaderBoardView = new LeaderBoardView();
@@ -69,19 +70,19 @@ class LobbyMenu
     }
 
 
-    updateUserCountUI(userCount)
+    updateUserCountUI(userCount : number)
     {
         $(LobbyMenu.CSS_ID.USER_COUNT_BOX).empty()
-        $(LobbyMenu.CSS_ID.USER_COUNT_BOX).append(userCount);
+        $(LobbyMenu.CSS_ID.USER_COUNT_BOX).append(userCount.toString());
     }
 
     bind()
     {
 
-        $('#googlePlusdisconnectUser').click(function ()
+        /*$('#googlePlusdisconnectUser').click(function ()
         {
             googlePlusdisconnectUser(access_token);
-        });
+        });*/
 
         $('#onlineMenu a').click((e) =>
         {
@@ -94,15 +95,15 @@ class LobbyMenu
             $(this).parent().addClass('active');
 
             //Hides all other divs and displays the one we want
-            $($(this).attr('value')).show();
-            $($(this).attr('value')).siblings().hide();
+            $($(this).attr('value') as string).show();
+            $($(this).attr('value') as string).siblings().hide();
         })
 
         $(LobbyMenu.CSS_ID.QUICK_PLAY_BTN).click(() =>
         {
             $(LobbyMenu.CSS_ID.QUICK_PLAY_BTN).unbind();
             AssetManager.getSound("CursorSelect").play();
-            this.lobbyRef.client_joinQuickGame();
+            this.lobbyRef.joinQuickGame();
         })
 
         $(LobbyMenu.CSS_ID.CREATE_BTN).click(() =>
@@ -123,9 +124,9 @@ class LobbyMenu
             $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM_SUBMIT).click((e) =>
             {
                 $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM_SUBMIT).unbind();
-                var name = $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM + " #inputName").val();
-                var playerCount = $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM + " #inputPlayers").val();
-                this.lobbyRef.client_createGameLobby(name, playerCount, levelSelector.getLevelName());
+                var name = $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM + " #inputName").val() as string;
+                var playerCount = $(LobbyMenu.CSS_ID.CREATE_LOBBY_FORM + " #inputPlayers").val() as number;
+                this.lobbyRef.createGameLobby(name, playerCount, levelSelector.getLevelName());
                 AssetManager.getSound("CursorSelect").play();
             });
             AssetManager.getSound("CursorSelect").play();
@@ -133,13 +134,13 @@ class LobbyMenu
         })
     }
 
-    displayMessage(msg)
+    displayMessage(msg : string)
     {
         $(LobbyMenu.CSS_ID.INFO_BOX).empty();
         $(LobbyMenu.CSS_ID.INFO_BOX).append(msg);
     }
 
-    show(callback)
+    show(callback : any)
     {
         $('.slide').fadeOut('normal', () =>
         {
@@ -158,22 +159,22 @@ class LobbyMenu
         });
     }
 
-    updateLobbyListUI(lobby: Lobby)
+    updateLobbyListUI(lobby: ClientLobby)
     {
         $(LobbyMenu.CSS_ID.LOBBY_TABLE).empty()
-        var gameLobbies: GameLobby[] = lobby.getGameLobbies();
+        var gameLobbies = lobby.getGameLobbies();
         for (var gameLobby in gameLobbies)
         {
-            var lob: GameLobby = gameLobbies[gameLobby];
+            var lob = gameLobbies[gameLobby] as ClientGameLobby;
             var disableButton = "";
-            if (lob.contains(Client.id) || lob.status == GameLobby.LOBBY_STATS.GAME_IN_PLAY)
+            if (lob.contains(Client.id) || lob.status == BaseGameLobby.LOBBY_STATS.GAME_IN_PLAY)
             {
                 disableButton = 'disabled="disabled"';
             }
 
             var status = "Waitting";
             var buttonText = " Join game ";
-            if (lob.status == GameLobby.LOBBY_STATS.GAME_IN_PLAY)
+            if (lob.status == BaseGameLobby.LOBBY_STATS.GAME_IN_PLAY)
             {
                 status = "Playing";
 
@@ -188,11 +189,11 @@ class LobbyMenu
         }
         $(LobbyMenu.CSS_ID.LOBBY_TABLE).append('</tbody></table>');
 
-        $(LobbyMenu.CSS_ID.JOIN_BTN).click(() =>
+        var _this = this;
+        $(LobbyMenu.CSS_ID.JOIN_BTN).click(function()
         {
-
             AssetManager.getSound("CursorSelect").play();
-            this.lobbyRef.client_joinGameLobby($(this).attr('value'));
+            _this.lobbyRef.joinGameLobby($(this).attr('value') as string);
         })
     }
 

@@ -1,3 +1,5 @@
+import { Settings } from "../Settings";
+
 /**
  * Graphics.js
  * Graphics namespace provides helper functions for creating a canvas
@@ -7,30 +9,29 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-declare var Stats;
-declare var $;
+declare var Stats : any;
 
 class PreRenderer
 {
 
-    private createPreRenderCanvas(width,height)
+    private createPreRenderCanvas(width : number, height : number) : CanvasRenderingContext2D
     {
         var bufferCanvas = <HTMLCanvasElement>document.createElement('canvas');
         bufferCanvas.width = width;
         bufferCanvas.height = height;
-        return bufferCanvas.getContext("2d");
+        return bufferCanvas.getContext("2d") as CanvasRenderingContext2D;
     }
 
-    render(drawFunc,width,height, canvas = null)
+    render(drawFunc : CallableFunction, width : number, height : number, canvas : HTMLCanvasElement | null = null)
     {
         width += 2;
         height += 2;
-        var ctx;
+        var ctx : CanvasRenderingContext2D;
 
         // If we have a canvas thats we want to reRender onto
         if (canvas)
         {
-            ctx = canvas.getContext('2d');
+            ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
         } else
         {
             ctx = this.createPreRenderCanvas(width, height);
@@ -42,7 +43,7 @@ class PreRenderer
         return ctx.canvas;
     }
 
-    renderAnimation(drawFuncsCollection, width, height)
+    renderAnimation(drawFuncsCollection : (()=>void)[], width : number, height : number)
     {
         var ctx = this.createPreRenderCanvas(width, height);
         for (var i in drawFuncsCollection)
@@ -56,10 +57,10 @@ class PreRenderer
 
 }
 
-module Graphics
+export module Graphics
 {
 
-    export var stats;
+    export var stats : any;
 
     export var preRenderer = new PreRenderer();
 
@@ -85,7 +86,7 @@ module Graphics
                 (<any>window).mozRequestAnimationFrame ||
                 (<any>window).oRequestAnimationFrame ||
                 window.requestAnimationFrame ||
-            function ( /* function */ callback, /* DOMElement */ element)
+            function ( /* function */ callback : CallableFunction, /* DOMElement */ element : Element)
             {
                 window.setTimeout(callback, 1000 / 60);
                 return true;
@@ -96,7 +97,7 @@ module Graphics
     }
 
     // may be useful in the furture for drawing rounded conor boxes for over the players head
-    export function roundRect(ctx, x, y, w, h, r)
+    export function roundRect(ctx : CanvasRenderingContext2D, x : number, y : number, w : number, h : number, r : number)
     {
         if (w < 2 * r) r = w / 2;
         if (h < 2 * r) r = h / 2;

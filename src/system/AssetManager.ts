@@ -8,10 +8,16 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../audio/Sound.ts"/>
-declare var BufferLoader;
+//<reference path="../audio/Sound.ts"/>
 
-module AssetManager
+import { Sprites } from '../animation/SpriteDefinitions';
+import { Settings } from '../Settings';
+import {Sound, SoundFallback} from './../audio/Sound';
+import {Maps} from './../environment/Maps';
+import { Logger } from './Utilies';
+import {BufferItem, BufferLoader} from './../audio/SoundBufferLoader';
+
+export module AssetManager
 {
     export var numAssetsLoaded: number = 0;
 
@@ -72,8 +78,8 @@ module AssetManager
 
     ];
 
-    export var images = [];
-    export var sounds = [];
+    export var images : {[key:string]: HTMLImageElement} = {};
+    export var sounds : {[key:string]: Sound} = {};
 
     export function isReady()
     {
@@ -86,26 +92,26 @@ module AssetManager
         return ((numAssetsLoaded) / (imagesToBeLoaded.length + audioToBeLoaded.length)) * 100;
     }
 
-    export function getImage(s)
+    export function getImage(s : string) : HTMLImageElement
     {
         return images[s];
     }
 
-    export function getSound(s): Sound
+    export function getSound(s : string): Sound
     {
         //If sound not found
         if (sounds[s] == null)
         {
-            return new Sound(null);
+            return new Sound("");
         }
 
         return sounds[s];
     }
 
-    export function loadImages(sources)
+    export function loadImages(sources : string[])
     {
 
-        var images = [];
+        //var images : HTMLImageElement[] = [];
         var loadedImages = 0;
         var numImages = 0;
         // get num of sources
@@ -115,7 +121,7 @@ module AssetManager
         }
         for (var src in sources)
         {
-            var name = sources[src].match("[a-z,A-Z,0-9]+[.]png")[0].replace(".png", "");
+            var name = ((sources[src] as string).match("[a-z,A-Z,0-9]+[.]png") as RegExpMatchArray)[0].replace(".png", "");
 
             if (images[name] == null)
             {
@@ -128,7 +134,7 @@ module AssetManager
 
                 images[name].onload = function ()
                 {
-                    Logger.log(" Image " + this.src + " loaded sucessfully ");
+                    //Logger.log(" Image " + this.src + " loaded sucessfully ");
                     if (++loadedImages >= numImages)
                     {
                         for (var img in images)
@@ -212,7 +218,7 @@ module AssetManager
         //}
     }
 
-    export function loadSounds(sources)
+    export function loadSounds(sources : string[])
     {
         //First lets try load our audio using the web audio API
         try
@@ -222,8 +228,8 @@ module AssetManager
                 throw "LOL"
             }
 
-            Sound.context = new webkitAudioContext();
-            var bufferLoader = new BufferLoader(Sound.context, sources, function (bufferList)
+            Sound.context = new AudioContext();
+            var bufferLoader = new BufferLoader(Sound.context, sources, function (bufferList : BufferItem[])
             {
                 for (var i = 0; i < bufferList.length; i++)
                 {
@@ -243,9 +249,9 @@ module AssetManager
 
                 for (var src in sources)
                 {
-                    var name = sources[src].match("[a-z,A-Z,0-9]+[.]")[0].replace(".", "")
+                    var name = ((sources[src] as string).match("[a-z,A-Z,0-9]+[.]") as RegExpMatchArray)[0].replace(".", "")
 
-                    // If IE use mp3 instead
+                    /*// If IE use mp3 instead
                     if ($.browser.msie)
                     {
                         sources[src] = sources[src].replace(".wav", ".mp3");
@@ -258,7 +264,7 @@ module AssetManager
                     {
                         numAssetsLoaded += sources.length-parseInt(src);
                         break;
-                    }
+                    }*/
 
                     sounds[name] = new SoundFallback(sources[src]);
                 }

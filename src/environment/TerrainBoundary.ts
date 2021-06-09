@@ -1,23 +1,22 @@
+import { b2Body, b2BodyDef, b2FixtureDef, b2PolygonShape, Physics } from "../system/Physics";
+//import { Worm } from "../Worm";
+
 /**
  * WorldBoundary.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Physics.ts"/>
-///<reference path="../system/Utilies.ts" />
-///<reference path="Terrain.ts" />
-
-class TerrainBoundary
+export class TerrainBoundary
 {
-    worldWidth;
-    worldHeight;
+    worldWidth : number;
+    worldHeight : number;
 
-    outerWorldWidth;
-    outerWorldHeight;
+    //outerWorldWidth : number;
+    //outerWorldHeight : number;
     
-    constructor (worldWidth,worldHeight)
+    constructor (worldWidth : number, worldHeight : number)
     {
 
         this.worldWidth = worldWidth; 
@@ -70,9 +69,9 @@ class TerrainBoundary
 
     }
 
-
+/*
        // What happens when a worm collies with another object
-    beginContact(contact)
+    beginContact(contact : any)
     {
         var obj1 = contact.GetFixtureA().GetBody().GetUserData();
         var obj2 = contact.GetFixtureB().GetBody().GetUserData();
@@ -85,7 +84,5 @@ class TerrainBoundary
         {
             obj2.hit(obj2.getHealth());
         }
-    }
-
- 
+    }*/
 }

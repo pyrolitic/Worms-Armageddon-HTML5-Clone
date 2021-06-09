@@ -15,15 +15,17 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Settings.ts" />
-///<reference path="Physics.ts" />
-declare var $;
+import { Sound } from "../audio/Sound";
+import { Settings } from "../Settings";
+import { AssetManager } from "./AssetManager";
+import { b2Vec2 } from "./Physics";
+
 interface String
 {
-    format(...numbers: String[]);
+    format(...numbers: String[]) : void;
 }
 
-String.prototype.format = function (...numbers: String[])
+/*String.prototype.format = function (...numbers: String[])
 {
     var args = arguments;
     return this.replace(/{(\d+)}/g, function (match, number)
@@ -33,9 +35,21 @@ String.prototype.format = function (...numbers: String[])
           : match
             ;
     });
+};*/
+
+export function StringFormat (fmt : string, ...numbers: string[])
+{
+    var args = arguments;
+    return fmt.replace(/{(\d+)}/g, function (match, number)
+    {
+        return typeof args[number] != 'undefined'
+          ? args[number]
+          : match
+            ;
+    });
 };
 
-module Notify
+export module Notify
 {
     export var locked = false;
     export var levels = {
@@ -76,7 +90,7 @@ module Notify
 
     }
 
-    export function hide(callback)
+    export function hide(callback : CallableFunction)
     {
         if (!locked)
         {
@@ -94,14 +108,14 @@ module Notify
 
 }
 
-module Utilies
+export module Utilies
 {
 
     //Allows for the copying of Object types into their proper types, used for copy constructer
     //for objects that are sent over the network. I have intergrated this function, into
     // the constructor of the Person object so it acts like C-style copy construction
     // WARNING: This creates a deep copy, so reference are not preserved
-    export function copy(newObject, oldObject)
+    export function copy<T>(newObject : T, oldObject : T)
     {
 
         for (var member in oldObject)
@@ -133,9 +147,9 @@ module Utilies
         return newObject;
     };
 
-    export function sign(x) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
+    export function sign(x : number) { return x > 0 ? 1 : x < 0 ? -1 : 0; }
 
-    export function findByValue(needle, haystack, haystackProperity, )
+    export function findByValue(needle : any, haystack : any, haystackProperity : any, )
     {
 
         for (var i = 0; i < haystack.length; i++)
@@ -148,18 +162,18 @@ module Utilies
         throw "Couldn't find object with proerpty " + haystackProperity + " equal to " + needle;
     }
 
-    export function random(min, max)
+    export function random(min : number, max : number)
     {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    export function pickRandom(collection)
+    export function pickRandom(collection : any[])
     {
         return collection[random(0, collection.length - 1)];
     }
 
-    var pickUnqineCollection = [];
-    export function pickUnqine(collection, stringId: string)
+    var pickUnqineCollection : {[key:string]: any} = {};
+    export function pickUnqine(collection : any[], stringId: string) : any
     {
         if (pickUnqineCollection[stringId])
         {
@@ -197,13 +211,13 @@ module Utilies
     }
 
 
-    export function deleteFromCollection(collection, indexToRemove)
+    export function deleteFromCollection(collection : any[], indexToRemove : any)
     {
         delete collection[indexToRemove];
         collection.splice(indexToRemove, 1);
     }
 
-    export function isBetweenRange(value, rangeMax, rangeMin)
+    export function isBetweenRange(value : number, rangeMax : number, rangeMin : number)
     {
         return value >= rangeMin && value <= rangeMax;
     }
@@ -213,7 +227,7 @@ module Utilies
         return new b2Vec2(Math.cos(angle), Math.sin(angle));
     }
 
-    export function vectorToAngle(vector)
+    export function vectorToAngle(vector : {x:number, y:number})
     {
         return Math.atan2(vector.y, vector.x);
     }
@@ -244,11 +258,11 @@ module Utilies
     //};
 
 
-	export function compress(s){
-		var dict = {};
+	export function compress(s : any){
+		var dict : {[key:string]: number} = {};
 	    var data = (s + "").split("");
-	    var out = [];
-	    var currChar;
+	    var tok : number[] = [];
+	    var currChar : string;
 	    var phrase = data[0];
 	    var code = 256;
 	    for (var i=1; i<data.length; i++) {
@@ -257,29 +271,29 @@ module Utilies
 	            phrase += currChar;
 	        }
 	        else {
-	            out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+	            tok.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
 	            dict[phrase + currChar] = code;
 	            code++;
 	            phrase=currChar;
 	        }
 	    }
-	    out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
-	    for (var i=0; i<out.length; i++) {
-	        out[i] = String.fromCharCode(out[i]);
+	    tok.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0));
+        var out : string[] = [];
+	    for (var i=0; i<tok.length; i++) {
+	        out[i] = String.fromCharCode(tok[i]);
 	    }
 	    return out.join("");
 	}
 
-	export function decompress(s)
+	export function decompress(s : any)
 	{
-
-	    var dict = {};
+	    var dict : {[key:string]: any} = {};
 	    var data = (s + "").split("");
 	    var currChar = data[0];
 	    var oldPhrase = currChar;
-	    var out = [currChar];
+	    var out : string[] = [currChar];
 	    var code = 256;
-	    var phrase;
+	    var phrase: string;
 	    for (var i = 1; i < data.length; i++)
 	    {
 	        var currCode = data[i].charCodeAt(0);
@@ -301,7 +315,7 @@ module Utilies
 
 	}
 
-    export function isNumber(n) {
+    export function isNumber(n : any) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
@@ -309,35 +323,35 @@ module Utilies
 
 
 
-module Logger
+export module Logger
 {
 
-    export function log(message)
+    export function log(message : string)
     {
         if (Settings.DEVELOPMENT_MODE || Settings.LOG)
             console.info(message);
     }
 
-    export function warn(message)
+    export function warn(message : string)
     {
         if (Settings.DEVELOPMENT_MODE || Settings.LOG)
          console.warn(message);
     }
 
-    export function debug(message)
+    export function debug(message : string)
     {
         if (Settings.DEVELOPMENT_MODE || Settings.LOG )
             console.log(message);
     }
 
-    export function error(message)
+    export function error(message : string)
     {
         if (Settings.DEVELOPMENT_MODE || Settings.LOG)
             console.error(message);
     }
 }
 
-module TouchUI
+export module TouchUI
 {
     var isFireHeld = false;
     var isJumpPressed = false;
@@ -358,30 +372,30 @@ module TouchUI
             $('body').append("<div class=touchButton id=" + fireButtonCssId + ">Fire</div>");
             $('body').append("<div class=touchButton id=" + jumpButtonCssId + ">Jump</div>");
 
-            $("#" + fireButtonCssId).bind('touchstart', function (e)
-            {
-                e.preventDefault();
-                isFireHeld = true;
-                Logger.log("touchstarted");
+            $("#" + fireButtonCssId).on({
+                touchstart: (e : TouchEvent) =>
+                {
+                    e.preventDefault();
+                    isFireHeld = true;
+                    Logger.log("touchstarted");
+                },
+                touchend: (e : TouchEvent) =>
+                {
+                    isFireHeld = false;
+                    Logger.log("touchend");
+                }
             });
 
-
-            $("#" + fireButtonCssId).bind("touchend", function (e)
-            {
-                isFireHeld = false;
-                Logger.log("touchend");
-            });
-
-            $("#" + jumpButtonCssId).bind('touchstart', function (e)
-            {
-                e.preventDefault();
-                isJumpPressed = true;
-            });
-
-
-            $("#" + jumpButtonCssId).bind("touchend", function (e)
-            {
-                isJumpPressed = false;
+            $("#" + jumpButtonCssId).on({
+                touchstart:  (e : TouchEvent) =>
+                {
+                    e.preventDefault();
+                    isJumpPressed = true;
+                },
+                touchend: (e : TouchEvent) =>
+                {
+                    isJumpPressed = false;
+                }
             });
         }
     }
@@ -414,144 +428,140 @@ module TouchUI
 
 }
 
-module keyboard
+export module keyboard
 {
+    var keyDown : Set<string> = new Set();
 
-    export var keys = [];
+    window.addEventListener("keydown", (ev) => {
+        keyDown.add(ev.code);
+    });
+    window.addEventListener("keyup", (ev) => {
+        keyDown.delete(ev.code);
+    });
 
-    (function ()
+    export function isKeyDown(code : string, actLikeKeyPress = false)
     {
-
-        $(window).keydown(function (e)
-        {
-            keys[e.which] = true;
-        });
-
-        $(window).keyup(function (e)
-        {
-            delete keys[e.which];
-        });
-
-    })();
-
-
-    export function isKeyDown(keyCode, actLikeKeyPress = false)
-    {
-        for (var key in keys)
-        {
-            if (key == keyCode)
-            {
-                if (actLikeKeyPress)
-                {
-                    delete keys[key]
-                }
-
-                return true;
+        if(keyDown.has(code)) {
+            if (actLikeKeyPress) {
+                keyDown.delete(code);
             }
+            return true;
         }
-
         return false;
     }
 
-    export function getKeyName(keycode: number)
+    /*export function isKeyDown(keyCode : number, actLikeKeyPress = false)
     {
-        for (var i in keyCodes)
-        {
-            if (keyCodes[i] == keycode)
+        if(keys[keyCode]) {
+            if (actLikeKeyPress)
             {
-                return i;
+                delete keys[keyCode]
             }
+
+            return true;
         }
+        return false;
+    }*/
+
+    export function getKeyName(code: string)
+    {
+        var m;
+        if((m = code.match(/^Key(\w)$/))) {
+            return m[1];
+        }
+        if((m = code.match(/^Arrow(\w+)$/))) {
+            var dir = m[1].toLowerCase();
+            return {"left": "⬅", "right": "➡", "up": "⬆", "down": "⬇"}[dir];
+        }
+        return code;
     }
 
-    export var keyCodes =  {
-    'Backspace': 8,
-    'Tab': 9,
-    'Enter': 13,
-    'Shift': 16,
-    'Ctrl': 17,
-    'Alt': 18,
-    'Pause': 19,
-    'Capslock': 20,
-    'Esc': 27,
-    'Pageup': 33,
+    /*export var keyCodes : {[key:string]: number} = {
+        'Backspace': 8,
+        'Tab': 9,
+        'Enter': 13,
+        'Shift': 16,
+        'Ctrl': 17,
+        'Alt': 18,
+        'Pause': 19,
+        'Capslock': 20,
+        'Esc': 27,
+        'Pageup': 33,
         'Space': 32,
-    'Pagedown': 34,
-    'End': 35,
-    'Home': 36,
-    'Leftarrow': 37,
-    'Uparrow': 38,
-    'Rightarrow': 39,
-    'Downarrow': 40,
-    'Insert': 45,
-    'Delete': 46,
-    '0': 48,
-    '1': 49,
-    '2': 50,
-    '3': 51,
-    '4': 52,
-    '5': 53,
-    '6': 54,
-    '7': 55,
-    '8': 56,
-    '9': 57,
-    'a': 65,
-    'b': 66,
-    'c': 67,
-    'd': 68,
-    'e': 101,
-    'f': 70,
-    'g': 71,
-    'h': 72,
-    'i': 73,
-    'j': 74,
-    'k': 75,
-    'l': 76,
-    'm': 77,
-    'n': 78,
-    'o': 79,
-    'p': 80,
-    'q': 81,
-    'r': 82,
-    's': 83,
-    't': 84,
-    'u': 85,
-    'v': 86,
-    'w': 87,
-    'x': 88,
-    'y': 89,
-    'z': 90,
-    'numpad0': 96,
-    'numpad1': 97,
-    'numpad2': 98,
-    'numpad3': 99,
-    'numpad4': 100,
-    'numpad6': 102,
-    'numpad7': 103,
-    'numpad8': 104,
-    'numpad9': 105,
-    'Multiply': 106,
-    'Plus': 107,
-    'Minut': 109,
-    'Dot': 110,
-    'Slash1': 111,
-    'F1': 112,
-    'F2': 113,
-    'F3': 114,
-    'F4': 115,
-    'F5': 116,
-    'F6': 117,
-    'F7': 118,
-    'F8': 119,
-    'F9': 120,
-    'F10': 121,
-    'F11': 122,
-    'F12': 123,
-    'equal': 187,
-    'Coma': 188,
-    'Slash': 191,
-    'Backslash': 220
-    }
-
-
+        'Pagedown': 34,
+        'End': 35,
+        'Home': 36,
+        'Leftarrow': 37,
+        'Uparrow': 38,
+        'Rightarrow': 39,
+        'Downarrow': 40,
+        'Insert': 45,
+        'Delete': 46,
+        '0': 48,
+        '1': 49,
+        '2': 50,
+        '3': 51,
+        '4': 52,
+        '5': 53,
+        '6': 54,
+        '7': 55,
+        '8': 56,
+        '9': 57,
+        'a': 65,
+        'b': 66,
+        'c': 67,
+        'd': 68,
+        'e': 101,
+        'f': 70,
+        'g': 71,
+        'h': 72,
+        'i': 73,
+        'j': 74,
+        'k': 75,
+        'l': 76,
+        'm': 77,
+        'n': 78,
+        'o': 79,
+        'p': 80,
+        'q': 81,
+        'r': 82,
+        's': 83,
+        't': 84,
+        'u': 85,
+        'v': 86,
+        'w': 87,
+        'x': 88,
+        'y': 89,
+        'z': 90,
+        'numpad0': 96,
+        'numpad1': 97,
+        'numpad2': 98,
+        'numpad3': 99,
+        'numpad4': 100,
+        'numpad6': 102,
+        'numpad7': 103,
+        'numpad8': 104,
+        'numpad9': 105,
+        'Multiply': 106,
+        'Plus': 107,
+        'Minut': 109,
+        'Dot': 110,
+        'Slash1': 111,
+        'F1': 112,
+        'F2': 113,
+        'F3': 114,
+        'F4': 115,
+        'F5': 116,
+        'F6': 117,
+        'F7': 118,
+        'F8': 119,
+        'F9': 120,
+        'F10': 121,
+        'F11': 122,
+        'F12': 123,
+        'equal': 187,
+        'Coma': 188,
+        'Slash': 191,
+        'Backslash': 220
+    }*/
 }

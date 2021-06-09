@@ -5,9 +5,7 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Utilies.ts" />
-
-module Settings
+export module Settings
 {
 
     //Game vars
@@ -18,8 +16,8 @@ module Settings
     export var SOUND = false;
 
     //Server details
-    export var NODE_SERVER_IP = '96.126.111.211';
-    export var LEADERBOARD_API_URL = 'http://96.126.111.211';
+    export var NODE_SERVER_IP = 'http://127.0.0.1';
+    export var LEADERBOARD_API_URL = 'http://127.0.0.1';
     export var NODE_SERVER_PORT = '8080';
 
     // development vars
@@ -64,7 +62,7 @@ module Settings
 
         if (argv[commands[2]] == "true")
         {
-           var testWindow = window.open('test.html', '|UnitTests', 'height=1000,width=700,top:100%');
+           var testWindow = window.open('test.html', '|UnitTests', 'height=1000,width=700,top:100%') as Window;
            testWindow.location.reload(); // This is so if the window was left open it refreshs
 
         }
@@ -74,16 +72,16 @@ module Settings
             SOUND = false;
         }
 
-        Logger.log(" Notice: argv are as follows " + commands);
+        //Logger.log(" Notice: argv are as follows " + commands);
     }
 
-    export function getUrlVars()
+    export function getUrlVars() : {[key: string] : string}
     {
         // This isn't conceptually "replacing" anything, but seems to be an easy way to iterate through the results?
         // Was originally returning true instead of the original value, but TS complained.
         // -M
-        var vars = {};
-        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key, value) =>
+        var vars : {[key: string] : string} = {};
+        window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (m, key : string, value) =>
         {
             vars[key] = value;
             return window.location.href;

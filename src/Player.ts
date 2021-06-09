@@ -7,13 +7,21 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Team.ts"/>
-///<reference path="system/Utilies.ts"/>
-///<reference path="system/Timer.ts"/>
-///<reference path="system/GamePad.ts"/>
-///<reference path="system/Controls.ts"/>
+import { GameInstance } from "./MainInstance";
+import {Client} from './networking/Client';
+import { Events } from './networking/Events';
+import { InstructionChain } from "./networking/InstructionChain";
+import { AssetManager } from './system/AssetManager';
+import { Controls } from './system/Controls';
+import { GamePad } from './system/GamePad';
+import { Physics } from './system/Physics';
+import { Timer } from "./system/Timer";
+import { keyboard, Notify, TouchUI, Utilies } from './system/Utilies';
+import { Team, TeamDataPacket } from './Team';
+import { ProjectileWeapon } from './weapons/ProjectileWeapon';
+import { ThrowableWeapon } from './weapons/ThrowableWeapon';
 
-class Player
+export class Player
 {
     private team: Team;
     id: string;
@@ -26,10 +34,9 @@ class Player
         this.team = new Team(playerId);
 
         // Global window keyup event
-        $(window).keyup((e) =>
-        {
+        window.addEventListener("keyup", (e) => {
             // Dectects keyup on fire button
-            if (e.which == Controls.fire.keyboard)
+            if (e.code == Controls.fire.keyboard)
             {
                 var wormWeapon = this.team.getCurrentWorm().getWeapon()
 
@@ -52,7 +59,7 @@ class Player
         return this.team.getTeamNetData();
     }
 
-    setPlayerNetData(data)
+    setPlayerNetData(data : any)
     {
         this.team.setTeamNetData(data);
     }
@@ -184,7 +191,7 @@ class Player
          //Finds the worm traveling at the highest velocity and if its over a therosold
          // the camera will then pan to the position of that worm.
          // So when their is an explosion it gives the player somthing interesting and fun to look at
-         var fastestWorm : Worm = GameInstance.wormManager.findFastestMovingWorm();
+         var fastestWorm = GameInstance.wormManager.findFastestMovingWorm();
          if (GameInstance.state.physicsWorldSettled && fastestWorm != null && fastestWorm.body.GetLinearVelocity().Length() > 3)
          {
                 GameInstance.camera.panToPosition(Physics.vectorMetersToPixels(fastestWorm.body.GetPosition()));
@@ -193,27 +200,27 @@ class Player
         if (GameInstance.state.hasNextTurnBeenTiggered() == false)
         {
 
-            if (keyboard.isKeyDown(38)) //up
+            if (keyboard.isKeyDown("ArrowUp")) //up
             {
                 GameInstance.camera.cancelPan();
                 GameInstance.camera.incrementY(-15)
             }
 
-            if (keyboard.isKeyDown(40)) //down
+            if (keyboard.isKeyDown("ArrowDown")) //down
             {
                 GameInstance.camera.cancelPan();
                 GameInstance.camera.incrementY(15)
             }
 
 
-            if (keyboard.isKeyDown(37)) //left
+            if (keyboard.isKeyDown("ArrowLeft")) //left
             {
                 GameInstance.camera.cancelPan();
                 GameInstance.camera.incrementX(-15)
             }
 
 
-            if (keyboard.isKeyDown(39)) //right
+            if (keyboard.isKeyDown("ArrowRight")) //right
             {
                 GameInstance.camera.cancelPan();
                 GameInstance.camera.incrementX(15)
@@ -242,7 +249,7 @@ class Player
 
     }
 
-    draw(ctx)
+    draw(ctx : CanvasRenderingContext2D)
     {
         this.team.draw(ctx);
     }
@@ -251,10 +258,10 @@ class Player
 }
 
 
-class PlayerDataPacket
+export class PlayerDataPacket
 {
     teamDataPacket: TeamDataPacket;
-    position;
+    position : any;
 
     constructor(player: Player)
     {

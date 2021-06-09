@@ -14,7 +14,11 @@
 ///<reference path="system/Timer.ts" />
 ///<reference path="Settings.ts" />
 
-class GameStateManager
+import { GameInstance } from "./MainInstance";
+import {Player} from "./Player";
+import { Physics } from "./system/Physics";
+
+export class GameStateManager
 {
     private nextTurnTrigger: boolean;
     private currentPlayerIndex: number;
@@ -24,14 +28,14 @@ class GameStateManager
 
     constructor()
     {
-
         this.nextTurnTrigger = false;
         this.currentPlayerIndex = 0;
         this.isStarted = false;
         this.physicsWorldSettled = false;
+        this.players = [];
     }
 
-    init(players)
+    init(players : Player[])
     {
         this.players = players;
         this.isStarted = true;
@@ -109,7 +113,7 @@ class GameStateManager
         //If the team is all dead return -1 to sign move to next player.
         if (this.getCurrentPlayer().getTeam().getPercentageHealth() <= 0)
         {
-            return null;
+            return "";
         }
 
         this.getCurrentPlayer().getTeam().nextWorm();

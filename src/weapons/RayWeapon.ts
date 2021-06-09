@@ -2,26 +2,19 @@
  * RayBased Weapons.js
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Graphics.ts"/>
-///<reference path="../system/AssetManager.ts"/>
-///<reference path="../system/Physics.ts"/>
-///<reference path="../environment/Terrain.ts"/>
-///<reference path="BaseWeapon.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="../animation/Sprite.ts"/>
-///<reference path="../animation/Effects.ts"/>
+import { SpriteDefinition } from "../animation/SpriteDefinitions";
+import { BaseWeapon } from "./BaseWeapon";
 
-class RayWeapon extends BaseWeapon
+export class RayWeapon extends BaseWeapon
 {
     damageToTerrainRadius: number;
     damgeToWorm: number;
-    forceScaler: number;
+    forceScaler: number = 1;
 
-    constructor(name, ammo, iconSpriteDef, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
+    constructor(name : string, ammo : number, iconSpriteDef : SpriteDefinition, takeOutAnimation: SpriteDefinition, takeAimAnimation: SpriteDefinition)
     {
         super(
             name,

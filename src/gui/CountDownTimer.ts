@@ -4,16 +4,16 @@
  * It also handles the switching of players when their time runs out. 
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Main.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="../system/Timer.ts" />
-///<reference path="../networking/NetworkTimer.ts" />
-///<reference path="../Settings.ts" />
-
-class CountDownTimer
+import { Game } from "../Game";
+import { GameInstance } from "../MainInstance";
+import { NetworkTimer } from "../networking/NetworkTimer";
+import { Settings } from "../Settings";
+import { AssetManager } from "../system/AssetManager";
+import { Timer } from "../system/Timer";
+export class CountDownTimer
 {
 
     timer: Timer;
@@ -60,7 +60,7 @@ class CountDownTimer
 
 
             this.previousSecound = timeLeft;
-            $('#turnTimeCounter').html(timeLeft);
+            $('#turnTimeCounter').html(timeLeft.toString());
 
             if (timeLeft < Settings.TURN_TIME_WARING && timeLeft >= 0)
             {

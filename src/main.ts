@@ -8,10 +8,19 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="Game.ts"/>
-///<reference path="system/Graphics.ts"/>
-///<reference path="gui/StartMenu.ts" />
-var GameInstance: Game;
+import { StartMenu } from "./gui/StartMenu";
+import { createGameInstance, GameInstance } from "./MainInstance";
+import { Settings } from "./Settings";
+import { AssetManager } from "./system/AssetManager";
+import { Graphics } from "./system/Graphics";
+
+declare global {
+    interface Window {
+        jQuery: any;
+        $: any;
+    }
+}
+
 $(document).ready(() => {
 
     Settings.getSettingsFromUrl();
@@ -20,7 +29,7 @@ $(document).ready(() => {
     {
         var startMenu = new StartMenu();
 
-        GameInstance = new Game();
+        createGameInstance();
         AssetManager.loadAssets();
 
         startMenu.onGameReady(function ()

@@ -1,21 +1,34 @@
-///<reference path="../system/Utilies.ts"/>
-///<reference path="InstructionChain.ts"/>
-declare var io;
+//import {io, Socket} from "../../node_modules/socket.io-client/build/index";  //'socket.io-client';
+declare var io : any;
+type Socket = any;
+import { Game } from '../Game';
+import { GameInstance } from "../MainInstance";
+import { Settings } from '../Settings';
+import { Physics, PhysiscsDataPacket } from '../system/Physics';
+import { Timer } from '../system/Timer';
+import { Logger, Notify, Utilies } from '../system/Utilies';
+import { Events } from './Events';
+import { InstructionChain } from "./InstructionChain";
 
-module Client
+export module Client
 {
-    export var socket;
-    export var id;
+    export var socket : Socket;
+    export var id : string;
     var packetRateLimiter: Timer;
     var previous = "";
 
-    export function connectionToServer(ip, port)
+    export function connectionToServer(ip : String, port : string)
     {
         try
         {
             var dest = ip + ":" + port;
             Logger.debug(" Client connecting to " + dest);
-            socket = io.connect(dest);
+            socket = io(dest, {
+                //withCredentials: true,
+                /*extraHeaders: {
+                    "custom-header": "abcd"
+                }*/
+            });
 
             socket.on(Events.client.ASSIGN_USER_ID, (id) =>
             {
@@ -76,7 +89,7 @@ module Client
         }
     }
 
-    export function sendRateLimited(event, packet){
+    export function sendRateLimited(event : any, packet : any){
 
         packetRateLimiter.update();
 
@@ -97,7 +110,7 @@ module Client
         return GameInstance.gameType == Game.types.LOCAL_GAME || GameInstance.lobby.client_GameLobby.currentPlayerId == Client.id
     }
 
-    export function sendImmediately(event, packet, rateLimiter = 0){
+    export function sendImmediately(event : any, packet : any, rateLimiter = 0){
 
         if (GameInstance.gameType == Game.types.ONLINE_GAME)
         {

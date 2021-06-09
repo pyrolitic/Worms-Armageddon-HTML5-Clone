@@ -5,7 +5,7 @@
  * It is also reponsibale for updating and drawing all the worms
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 ///<reference path="Worm.ts"/>
@@ -13,8 +13,17 @@
 ///<reference path="weapons/WeaponManager.ts"/>
 ///<reference path="animation/BounceArrow.ts"/>
 
+import { Sprites } from "./animation/SpriteDefinitions";
+import { Game } from "./Game";
+import { GameInstance } from "./MainInstance";
+import { AssetManager } from "./system/AssetManager";
+import { Physics } from "./system/Physics";
+import { Utilies } from "./system/Utilies";
+import { WeaponManager } from "./weapons/WeaponManager";
+import { Worm, WormDataPacket } from "./Worm";
 
-class Team
+
+export class Team
 {
     worms: Worm[];
     currentWorm: number;
@@ -28,7 +37,7 @@ class Team
     static teamCount = 0;
 
 
-    constructor (playerId)
+    constructor (playerId : number)
     {
 
         this.color = Utilies.pickUnqine(["#FA6C1D", "#12AB00", "#B46DD2", "#B31A35", "#23A3C6","#9A4C44"], "colors");
@@ -56,8 +65,8 @@ class Team
 
     getTeamNetData()
     {
-        var packet = {};
-        for (var w in this.worms)
+        var packet : {[key: number] : any} = {};
+        for (var w = 0 ; w < this.worms.length; w++)
         {
             packet[w] = this.worms[w].getWormNetData();
         }
@@ -65,7 +74,7 @@ class Team
         return packet;
     }
 
-    setTeamNetData( packetStream )
+    setTeamNetData( packetStream : {[key: number] : any} )
     {
         for (var w in packetStream)
         {
@@ -129,7 +138,7 @@ class Team
         return this.weaponManager;
     }
 
-    setCurrentWorm(wormIndex)
+    setCurrentWorm(wormIndex : number)
     {
         this.currentWorm = wormIndex;
     }
@@ -179,7 +188,7 @@ class Team
 
 }
 
-class TeamDataPacket
+export class TeamDataPacket
 {
     wormsDataPacket: WormDataPacket[];
     name;

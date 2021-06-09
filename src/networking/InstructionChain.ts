@@ -10,26 +10,26 @@
  * as this code is viewable on GitHub :) 
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
 
-class InstructionChain
+export class InstructionChain
 {
     //instructionChain shorted to iC so the packet is smaller
     iC: string[];
 
     // array of anything
-    a; 
+    a : any[]; 
 
-    constructor(instructionChain: string = "", args = [])
+    constructor(instructionChain: string = "", args : any[] = [])
     {
         this.iC = instructionChain.split('.');
         this.a = args;
 
     }
 
-    callFunc(objectToApplyInstruction)
+    callFunc(objectToApplyInstruction : any)
     {
         var obj = objectToApplyInstruction;
         var objMethod;

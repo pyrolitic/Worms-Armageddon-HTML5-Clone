@@ -4,25 +4,24 @@
  * can use to drill down into the terrain and also hurt other worms.
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Physics.ts"/>
-///<reference path="../system/Utilies.ts" />
-///<reference path="../Worm.ts" />
-///<reference path="../animation/Sprite.ts"/>
-///<reference path="../system/Timer.ts"/>
-///<reference path="../Game.ts"/>
-///<reference path="BaseWeapon.ts"/>
+import { Sprites } from "../animation/SpriteDefinitions";
+import { GameInstance } from "../MainInstance";
+import { AssetManager } from "../system/AssetManager";
+import { Physics } from "../system/Physics";
+import { Timer } from "../system/Timer";
+import { Logger } from "../system/Utilies";
+import { Worm } from "../Worm";
+import { BaseWeapon } from "./BaseWeapon";
 
-
-class Drill extends BaseWeapon
+export class Drill extends BaseWeapon
 {
-    worm: Worm;
     timeBetweenExploisionsTimer: Timer;
     useDurationTimer: Timer;
 
-    constructor(ammo, name = "Drill", icon = Sprites.weaponIcons.drill,takeOutAnimation = Sprites.worms.takeOutDrill, actionAnimation = Sprites.worms.drilling)
+    constructor(ammo : number, name = "Drill", icon = Sprites.weaponIcons.drill,takeOutAnimation = Sprites.worms.takeOutDrill, actionAnimation = Sprites.worms.drilling)
     {
         super(
             "Drill", // Weapon name
@@ -39,7 +38,6 @@ class Drill extends BaseWeapon
         this.requiresAiming = false;
     }
 
-
     activate(worm: Worm)
     {
         if (this.ammo > 0)
@@ -47,7 +45,7 @@ class Drill extends BaseWeapon
             super.activate(worm);
             this.useDurationTimer.reset();
             this.timeBetweenExploisionsTimer.reset();
-            this.worm.setSpriteDef(this.takeAimAnimations, true,false);
+            (this.worm as Worm).setSpriteDef(this.takeAimAnimations, true,false);
 
             return true;
         } else
@@ -60,7 +58,7 @@ class Drill extends BaseWeapon
     {
         this.setIsActive(false);
         Logger.debug(" deactivedate ");
-        this.worm.setSpriteDef(this.takeAimAnimations, false); //unlocks sprite
+        (this.worm as Worm).setSpriteDef(this.takeAimAnimations, false); //unlocks sprite
         //this.worm.setSpriteDef(Sprites.worms.idle1);
     }
 
@@ -78,7 +76,7 @@ class Drill extends BaseWeapon
 
             if (this.timeBetweenExploisionsTimer.hasTimePeriodPassed())
             {
-                GameInstance.terrain.addToDeformBatch(Physics.metersToPixels(this.worm.body.GetPosition().x), Physics.metersToPixels(this.worm.body.GetPosition().y), 25);
+                GameInstance.terrain.addToDeformBatch(Physics.metersToPixels((this.worm as Worm).body.GetPosition().x), Physics.metersToPixels((this.worm as Worm).body.GetPosition().y), 25);
             }
 
             this.useDurationTimer.update();

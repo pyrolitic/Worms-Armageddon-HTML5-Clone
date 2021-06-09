@@ -10,18 +10,22 @@
  *  author:  Ciarán McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../system/Utilies.ts"/>
-declare var webkitAudioContext;
+/////<reference path="../system/Utilies.ts"/>
+//declare var webkitAudioContext;
 
-class Sound
+import { Settings } from "../Settings";
+import { AssetManager } from "../system/AssetManager";
+import { Logger } from "../system/Utilies";
+
+export class Sound
 {
-    static context;
+    static context : AudioContext;
 
-    source;
-    buffer;
-    playing;
+    source : AudioBufferSourceNode | null = null;
+    buffer : AudioBuffer | string;
+    playing: boolean;
 
-    constructor(buffer)
+    constructor(buffer : AudioBuffer | string)
     {
         this.buffer = buffer;
         this.playing = false;
@@ -40,15 +44,15 @@ class Sound
             if (this.playing == false || allowSoundOverLay == true)
             {
                 this.source = Sound.context.createBufferSource();
-                this.source.buffer = this.buffer;
+                this.source.buffer = this.buffer as AudioBuffer;
 
-                var gainNode = Sound.context.createGainNode();
+                var gainNode = Sound.context.createGain();
                 this.source.connect(gainNode);
                 gainNode.connect(Sound.context.destination);
                 gainNode.gain.value = volume;
-                this.source.noteOn(time);
+                this.source.start(time);
                 this.playing = true;
-                var bufferLenght = this.buffer.duration;
+                var bufferLenght = (this.buffer as AudioBuffer).duration;
 
                 setTimeout(() => {
                     this.playing = false;
@@ -69,8 +73,10 @@ class Sound
     pause()
     {
         if (Settings.SOUND && this.buffer != null) {
-            if (typeof(this.source.noteOff) !== 'undefined') {
-                this.source.noteOff(0);
+            if(this.source != null) {
+                if (typeof(this.source.stop) !== 'undefined') {
+                    this.source.stop(0);
+                }
             }
         }
     }
@@ -79,35 +85,35 @@ class Sound
 }
 
 //SoundFallback use just the simple Audio tag, works ok but not as feature full as web audio api.
-class SoundFallback extends Sound
+export class SoundFallback extends Sound
 {
     audio: HTMLAudioElement;
 
-    constructor(soundSrc)
+    constructor(soundSrc : string)
     {
         super(soundSrc);
-        this.load(soundSrc);
+        this.audio = SoundFallback.load(soundSrc);
     }
 
-    load(soundSrc)
+    static load(soundSrc : string) : HTMLAudioElement
     {
-          this.audio = <HTMLAudioElement>document.createElement("Audio");
+        let audio = <HTMLAudioElement>document.createElement("Audio");
 
         // When the sound loads sucesfully tell the asset manager
-        $(this.audio).on("loadeddata", () =>
+        $(audio).on("loadeddata", () =>
         {
             AssetManager.numAssetsLoaded++;
-            Logger.log(" Sound loaded " + this.audio.src );
+            Logger.log(" Sound loaded " + audio.src );
         });
 
-        this.audio.onerror = () => {
-            Logger.error( " Sound failed to load " + this.audio.src);
+        audio.onerror = () => {
+            Logger.error( " Sound failed to load " + audio.src);
         }
 
-        this.audio.src = soundSrc;
-        $('body').append(this.audio);
+        audio.src = soundSrc;
+        $('body').append(audio);
 
-
+        return audio;
     }
 
     play(volume = 1, time = 0, allowSoundOverLay = false)

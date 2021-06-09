@@ -7,23 +7,23 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Game.ts"/>
-///<reference path="../Main.ts"/>
-///<reference path="SpriteDefinitions.ts"/>
-class Sprite
+import { AssetManager } from "../system/AssetManager";
+import { SpriteDefinition } from "./SpriteDefinitions";
+
+export class Sprite
 {
 
-    spriteDef;
-    currentFrameY: number;
+    spriteDef : SpriteDefinition;
+    currentFrameY: number = 0;
 
     finished: boolean;
     noLoop: boolean;
     lastUpdateTime;
     accumulateDelta;
     isSpriteLocked;
-    onFinishFunc;
-    frameHeight;
-    image;
+    onFinishFunc : CallableFunction | null = null;
+    frameHeight : number = 0;
+    image : HTMLImageElement;
 
     frameIncremeter;
 
@@ -37,9 +37,12 @@ class Sprite
         this.lastUpdateTime = 0;
         this.accumulateDelta = 0;
         this.isSpriteLocked = false;
-        this.setSpriteDef(spriteDef);
-         this.noLoop = noLoop;
+        this.spriteDef = spriteDef; //just to appease typescript
+        this.image = AssetManager.getImage(spriteDef.imageName); //more appeasement
+        this._setSpriteDef(spriteDef);
+        this.noLoop = noLoop;
 
+        this.finished = false;
     }
 
     update()
@@ -82,13 +85,13 @@ class Sprite
     }
 
     //Draws this sprite at the center of another
-    drawOnCenter(ctx, x, y, spriteToCenterOn: Sprite)
+    drawOnCenter(ctx : CanvasRenderingContext2D, x : number, y : number, spriteToCenterOn: Sprite)
     {
         if (this.finished == false)
         {
             ctx.save();
             ctx.translate(
-                (spriteToCenterOn.getImage().width - this.getImage().width) / 2,
+                ((spriteToCenterOn.getImage().width as number) - (this.getImage().width as number)) / 2,
                 (spriteToCenterOn.getFrameHeight() - this.getFrameHeight()) / 2
             )
             this.draw(ctx, x, y);
@@ -96,17 +99,17 @@ class Sprite
         }
     }
 
-    draw(ctx, x, y)
+    draw(ctx : CanvasRenderingContext2D, x : number, y : number)
     {
         var tmpCurrentFrameY = Math.floor(this.currentFrameY);
         if(tmpCurrentFrameY >= 0)
         {
             ctx.drawImage(
                    this.image,
-                   0, tmpCurrentFrameY * this.frameHeight, this.image.width, this.frameHeight,
+                   0, tmpCurrentFrameY * this.frameHeight, (this.image.width as number), this.frameHeight,
                    Math.floor(x),
                    Math.floor(y),
-                  this.image.width,
+                  this.image.width as number,
                   this.frameHeight
             );
         }
@@ -122,7 +125,7 @@ class Sprite
         return this.currentFrameY;
     }
 
-    setCurrentFrame(frame)
+    setCurrentFrame(frame : number)
     {
         if (frame >= 0 && frame < this.spriteDef.frameCount)
         {
@@ -143,7 +146,7 @@ class Sprite
 
     getFrameWidth()
     {
-       return this.image.width;
+       return this.image.width as number;
     }
 
     getTotalFrames()
@@ -153,10 +156,25 @@ class Sprite
 
 
     // Allows for func to be called once this sprite animation has finished
-    onAnimationFinish(func)
+    onAnimationFinish(func : CallableFunction)
     {
         if(this.isSpriteLocked == false)
         this.onFinishFunc = func;
+    }
+
+    _setSpriteDef(spriteDef: SpriteDefinition, lockSprite = false, noLoop = false)
+    {
+        if (this.isSpriteLocked == false)
+        {
+            this.noLoop = noLoop;
+            this.finished = false;
+            this.spriteDef = spriteDef;
+            this.currentFrameY = spriteDef.frameY;
+            this.isSpriteLocked = lockSprite;
+
+            this.image = AssetManager.getImage(spriteDef.imageName);
+            this.frameHeight = (this.image.height as number) / spriteDef.frameCount;
+        }
     }
 
     setSpriteDef(spriteDef: SpriteDefinition, lockSprite = false, noLoop = false)
@@ -164,17 +182,7 @@ class Sprite
 
         if (spriteDef != this.spriteDef)
         {
-            if (this.isSpriteLocked == false)
-            {
-                this.noLoop = noLoop;
-                this.finished = false;
-                this.spriteDef = spriteDef;
-                this.currentFrameY = spriteDef.frameY;
-                this.isSpriteLocked = lockSprite;
-
-                this.image = AssetManager.getImage(spriteDef.imageName);
-                this.frameHeight = this.image.height / spriteDef.frameCount;
-            }
+            this._setSpriteDef(spriteDef, lockSprite, noLoop);
         }
 
 

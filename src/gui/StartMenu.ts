@@ -7,32 +7,35 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="../Settings.ts" />
-///<reference path="../system/Controls.ts"/>
-///<reference path="LobbyMenu.ts"/>
-///<reference path="SettingsMenu.ts"/>
-declare var $;
+import { GameInstance } from "../MainInstance";
+import { Settings } from "../Settings";
+import { AssetManager } from "../system/AssetManager";
+import { Controls } from "../system/Controls";
+import { keyboard, Notify, TouchUI } from "../system/Utilies";
+import { Tutorial } from "../Tutorial";
+import { SettingsMenu } from "./SettingsMenu";
 
-class StartMenu
+
+export class StartMenu
 {
     controlsView;
-    settingsMenu: SettingsMenu;
-    static callback;
+    settingsMenu: SettingsMenu | null = null;
+    static callback : CallableFunction;
 
     constructor()
     {
         //TODO gamepad controls
         //<img style="width:80%" src="data/images/menu/xbox360controls.png"><h2>Or</h2>
         this.controlsView = '<div style="text-align:center">' +
-            ' <p>Just incase you have never played the original worms armageddon, its a turn base deathmatch game. Where you control a team of worms. Use whatever weapons you have to destroy the enemy. <p><br>' +
+            ' <p>Just in case you have never played the original Worms Armageddon, it\'s a turn based deathmatch game, where you control a team of worms. Use whatever weapons or tools you have to destroy the enemy. <p><br>' +
             '<p><kbd> Space' +
-            '</kbd>  <kbd> ' + String.fromCharCode(Controls.walkLeft.keyboard) +
-            '</kbd> <kbd> ' + String.fromCharCode(Controls.walkRight.keyboard) +
+            '</kbd>  <kbd> ' + keyboard.getKeyName(Controls.walkLeft.keyboard) +
+            '</kbd> <kbd> ' + keyboard.getKeyName(Controls.walkRight.keyboard) +
             '</kbd> - Jump, Left, Right. <br> <br>' +
-             ' <kbd>' + String.fromCharCode(Controls.aimUp.keyboard) + '</kbd> ' +
-             ' <kbd>' + String.fromCharCode(Controls.aimDown.keyboard) + '</kbd> ' +
+             ' <kbd>' + keyboard.getKeyName(Controls.aimUp.keyboard) + '</kbd> ' +
+             ' <kbd>' + keyboard.getKeyName(Controls.aimDown.keyboard) + '</kbd> ' +
              ' - Aim up and down. </p><br>' +
-            ' <kbd>' + String.fromCharCode(Controls.toggleWeaponMenu.keyboard) + '</kbd> or right mouse - Weapon Menu. </p><br>' +
+            ' <kbd>' + keyboard.getKeyName(Controls.toggleWeaponMenu.keyboard) + '</kbd> or right mouse - Weapon Menu. </p><br>' +
             ' <kbd>Enter</kbd> - Fire weapon. </p><p></p><br>' +
             '<a class="btn btn-primary btn-large" id="startLocal" style="text-align:center">Lets play!</a></div>';
     }
@@ -43,7 +46,7 @@ class StartMenu
     }
 
 
-    onGameReady(callback)
+    onGameReady(callback : CallableFunction)
     {
 
         StartMenu.callback = callback;
@@ -60,15 +63,7 @@ class StartMenu
                     $('#startLocal').removeAttr("disabled");
                     $('#startOnline').removeAttr("disabled");
 
-
-                    // IE tell the user to get a better browser, but still allow them to play
-                    if ($.browser.msie)
-                    {
-                         $('#startTutorial').removeAttr("disabled");
-                        $('#notice').append('<div class="alert alert-error" style="text-align:center">' +
-                            '<strong>Bad news :( </strong> Your using Internet explorer, the game preformance will be hurt. For best preformance use ' +
-                            '<a href="https://www.google.com/intl/en/chrome/browser/">Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/">FireFox</a>. </div> ');
-                    } else if (TouchUI.isTouchDevice())
+                    if (TouchUI.isTouchDevice())
                     {
                         $('#notice').append('<div class="alert alert-error" style="text-align:center">' +
                             '<strong>Hey tablet user</strong> There may be performance problems and some missing features in the tablet version. You can still play though!</div> ');
@@ -98,8 +93,8 @@ class StartMenu
                     $('#startLocal').off('click');
                     AssetManager.getSound("CursorSelect").play();
                     $('.slide').empty();
-                    $('.slide').append(this.settingsMenu.getView());
-                    this.settingsMenu.bind(() => {
+                    $('.slide').append((this.settingsMenu as SettingsMenu).getView());
+                    (this.settingsMenu as SettingsMenu).bind(() => {
                         AssetManager.getSound("CursorSelect").play();
                         this.controlsMenu(callback);
                     });
@@ -114,7 +109,7 @@ class StartMenu
                   $('#startOnline').off('click');
                 if (AssetManager.isReady())
                 {
-                    if (GameInstance.lobby.client_init() != false)
+                    if (GameInstance.lobby.init() != false)
                     {
                         $('#notice').empty();
                         GameInstance.lobby.menu.show(callback);
@@ -158,7 +153,7 @@ class StartMenu
         }
     }
 
-    controlsMenu(callback)
+    controlsMenu(callback : CallableFunction)
     {
 
         $('.slide').fadeOut('normal', () =>

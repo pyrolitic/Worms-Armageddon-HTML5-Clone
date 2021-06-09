@@ -1,3 +1,5 @@
+import { keyboard } from "./Utilies"
+
 /**
  *  
  * Centrialized location for controls and input
@@ -5,71 +7,70 @@
  *  TODO Complete this when intergrating gamepad
  *
  *  License: Apache 2.0
- *  author:  Ciarán McCann
+ *  author:  Ciarï¿½n McCann
  *  url: http://www.ciaranmccann.me/
  */
-module Controls
+
+interface Control {
+    gamepad?: number;
+    keyboard: string;
+    mouse?: number;
+}
+
+export module Controls
 {
-    export var toggleWeaponMenu =
+    export var toggleWeaponMenu : Control =
     {
         gamepad: -1,
-        keyboard: 101,
-        mouse: 3
+        keyboard: "KeyE",
+        mouse: 2
     }
 
-    export var walkLeft =
+    export var walkLeft : Control =
     {
         gamepad: -1,
-        keyboard: 65,
-        mouse: -1
+        keyboard: "KeyA",
     }
 
-    export var walkRight =
+    export var walkRight : Control =
     {
         gamepad: -1,
-        keyboard: 68,
-        mouse: -1
+        keyboard: "KeyD",
     }
 
-    export var jump =
+    export var jump : Control =
     {
         gamepad: -1,
-        keyboard: 32,
-        mouse: -1
+        keyboard: "Space",
     }
 
-    export var backFlip =
+    export var backFlip : Control =
     {
         gamepad: -1,
-        keyboard: keyboard.keyCodes.Backspace,
-        mouse: -1
+        keyboard: "Backspace",
     }
 
-    export var aimUp =
+    export var aimUp : Control =
     {
         gamepad: -1,
-        keyboard: 87,
-        mouse: -1
+        keyboard: "KeyW",
     }
 
-    export var aimDown =
+    export var aimDown : Control =
     {
         gamepad: -1,
-        keyboard: 83,
-        mouse: -1
+        keyboard: "KeyS",
     }
 
-    export var fire =
+    export var fire : Control =
     {
         gamepad: -1,
-        keyboard: 13,
-        mouse: 1
+        keyboard: "Enter",
+        mouse: 0
     }
 
-    export function checkControls(control,key)
+    /*export function checkControls(control : Control, key : any)
     {
         return (key == control.gamepad || key == control.keyboard ||  key == control.mouse);
-    }
-
-
+    }*/
 }

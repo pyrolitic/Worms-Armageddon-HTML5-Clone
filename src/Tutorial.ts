@@ -5,17 +5,18 @@
  *  author:  Ciar�n McCann
  *  url: http://www.ciaranmccann.me/
  */
-///<reference path="system/Utilies.ts"/>
-///<reference path="animation/HealthReduction.ts" />
-///<reference path="Settings.ts" />
+import { GameInstance } from "./MainInstance";
+import { Controls } from "./system/Controls";
+import { keyboard, Notify } from "./system/Utilies";
+import { HolyGrenade } from "./weapons/HolyGrenade";
+import { JetPack } from "./weapons/JetPack";
 
-
-class Tutorial
+export class Tutorial
 {
 
     currentCommand;
     isFinished: boolean;
-    timeOut;
+    timeOut : any;
 
     constructor()
     {
@@ -168,10 +169,10 @@ var tutorialCommandBank = [
         message: "You can move the camera around using the arrow keys, give it a shot",
         detection: function ()
         {
-            if (keyboard.isKeyDown(keyboard.keyCodes.Leftarrow) ||
-                keyboard.isKeyDown(keyboard.keyCodes.Downarrow) ||
-                keyboard.isKeyDown(keyboard.keyCodes.Rightarrow) ||
-                keyboard.isKeyDown(keyboard.keyCodes.Uparrow) )
+            if (keyboard.isKeyDown("ArrowLeft") ||
+                keyboard.isKeyDown("ArrowDown") ||
+                keyboard.isKeyDown("ArrowRight") ||
+                keyboard.isKeyDown("ArrowUp"))
             {
                 return true;
             }

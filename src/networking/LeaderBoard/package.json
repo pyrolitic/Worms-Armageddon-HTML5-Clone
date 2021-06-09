@@ -5,5 +5,9 @@
     "private": true,
     "dependencies": {
         "express": "3.x"
+    },
+    "devDependencies": {
+        "@types/express": "^4.17.12",
+        "@types/mongodb": "^3.6.17"
     }
 }
